@@ -1,189 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Manchester Safe House — Careers</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Manchester Safe House — Careers</title>
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+	<!-- Fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
-  <!-- Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+	<!-- Icons -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-  <!-- GSAP -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+	<!-- GSAP -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 
-  <!-- Preload a safe default background -->
-  <link rel="preload" as="image" href="https://picsum.photos/seed/msh1/1920/1080" imagesrcset="https://picsum.photos/seed/msh1/640/360 640w, https://picsum.photos/seed/msh1/1280/720 1280w, https://picsum.photos/seed/msh1/1920/1080 1920w" imagesizes="100vw" />
+	<!-- Preload a safe default background -->
+	<link rel="preload" as="image" href="Bg1.PNG" imagesrcset="Bg1.PNG" imagesizes="100vw" />
 
- 
+	<link rel="stylesheet" href="style.css">
+	<script src="script.js"></script>
 </head>
 
 <body>
-  <a href="#main" class="skip-link">Skip to content</a>
+	<a href="#main" class="skip-link">Skip to content</a>
 
-  <!-- Fixed cinematic background -->
-  <div class="bg-stack" aria-hidden="true">
-    <!-- Defaults; can be replaced via panel or query params -->
-    <img class="bg-img" data-src="https://picsum.photos/seed/msh1/1920/1080" data-srcset="https://picsum.photos/seed/msh1/640/360 640w, https://picsum.photos/seed/msh1/1280/720 1280w, https://picsum.photos/seed/msh1/1920/1080 1920w" sizes="100vw" alt="" role="presentation" />
-    <img class="bg-img" data-src="https://picsum.photos/seed/msh2/1920/1080" data-srcset="https://picsum.photos/seed/msh2/640/360 640w, https://picsum.photos/seed/msh2/1280/720 1280w, https://picsum.photos/seed/msh2/1920/1080 1920w" sizes="100vw" alt="" role="presentation" />
-    <img class="bg-img" data-src="https://picsum.photos/seed/msh3/1920/1080" data-srcset="https://picsum.photos/seed/msh3/640/360 640w, https://picsum.photos/seed/msh3/1280/720 1280w, https://picsum.photos/seed/msh3/1920/1080 1920w" sizes="100vw" alt="" role="presentation" />
-    <img class="bg-img" data-src="https://picsum.photos/seed/msh4/1920/1080" data-srcset="https://picsum.photos/seed/msh4/640/360 640w, https://picsum.photos/seed/msh4/1280/720 1280w, https://picsum.photos/seed/msh4/1920/1080 1920w" sizes="100vw" alt="" role="presentation" />
-    <img class="bg-img" data-src="https://picsum.photos/seed/msh5/1920/1080" data-srcset="https://picsum.photos/seed/msh5/640/360 640w, https://picsum.photos/seed/msh5/1280/720 1280w, https://picsum.photos/seed/msh5/1920/1080 1920w" sizes="100vw" alt="" role="presentation" />
-    <div class="bg-overlay"></div>
-    <div class="grain"></div>
-  </div>
+	<!-- Fixed cinematic background -->
+	<div class="bg-stack" aria-hidden="true">
+		<!-- Defaults; can be replaced via panel or query params -->
+		<img class="bg-img" data-src="Bg1.PNG" data-srcset="Bg1.PNG" sizes="100vw" alt="" role="presentation" />
+		<img class="bg-img" data-src="Bg2.PNG" data-srcset="Bg2.PNG" sizes="100vw" alt="" role="presentation" />
+		<img class="bg-img" data-src="Bg3.PNG" data-srcset="Bg3.PNG" sizes="100vw" alt="" role="presentation" />
+		<img class="bg-img" data-src="Bg5.PNG" data-srcset="Bg5.PNG" sizes="100vw" alt="" role="presentation" />
+		<img class="bg-img" data-src="Bg4.PNG" data-srcset="Bg4.PNG" sizes="100vw" alt="" role="presentation" />
+		<div class="bg-overlay"></div>
+		<div class="grain"></div>
+	</div>
 
-  <!-- Header -->
-  <header class="site-header" role="banner" aria-label="Site">
-    <div class="brand">
-      <img id="brandLogo" class="brand-logo" src="" alt="Manchester Safe House logo" />
-      <div class="brand-title" aria-label="Manchester Safe House">
-        <span>Manchester</span><span>Safe</span><span class="gold">House</span>
-      </div>
-    </div>
-    <div class="header-cta">
-      <button class="btn btn-outline" id="themeBtn" aria-label="Theme" title="Dark mode active" disabled>
-        <i class="fa-solid fa-moon"></i>
-      </button>
-      <button class="btn btn-primary" id="watchTop">
-        <i class="fa-solid fa-play"></i><span class="label">Watch the film</span>
-      </button>
-    </div>
-  </header>
+	<!-- Header -->
+	<header class="site-header" role="banner" aria-label="Site">
+		<div class="brand">
+			<img id="brandLogo" class="brand-logo" src="Logo.png" alt="Manchester Safe House logo" />
+			<div class="brand-title" aria-label="Manchester Safe House">
+				<span>Manchester</span><span>Safe</span><span class="gold">House</span>
+			</div>
+		</div>
+		<div class="header-cta">
+			<button class="btn btn-outline" id="themeBtn" aria-label="Theme" title="Dark mode active" disabled>
+				<i class="fa-solid fa-moon"></i>
+			</button>
+			<button class="btn btn-primary" id="watchTop">
+				<i class="fa-solid fa-play"></i><span class="label">Watch the film</span>
+			</button>
+		</div>
+	</header>
 
-  <!-- Scroll progress -->
-  <div class="progress-wrap" aria-hidden="true">
-    <div class="progress" id="progressBar"></div>
-  </div>
+	<!-- Scroll progress -->
+	<div class="progress-wrap" aria-hidden="true">
+		<div class="progress" id="progressBar"></div>
+	</div>
 
-  <main id="main" tabindex="-1">
-    <!-- Section 1 -->
-    <section class="section" id="section1" aria-label="Intro">
-      <div class="content">
-        <img id="crestImg" class="crest" src="" alt="Manchester Safe House crest logo" />
-        <h1>Join us. <span class="gold">Be you.</span></h1>
-        <div class="cta-row">
-          <button class="btn btn-primary" data-open-modal="#filmModal">
-            <i class="fa-solid fa-play"></i><span>Watch the film</span>
-          </button>
-        </div>
-      </div>
-    </section>
+	<main id="main" tabindex="-1">
+		<!-- Section 1 -->
+		<section class="section" id="section1" aria-label="Intro">
+			<div class="content">
+				<img id="crestImg" class="crest" src="crest.PNG" alt="Manchester Safe House crest logo" />
+				<h1>Join us. <span class="gold">Be you.</span></h1>
+				<div class="cta-row">
+					<button class="btn btn-primary" data-open-modal="#filmModal">
+						<i class="fa-solid fa-play"></i><span>Watch the film</span>
+					</button>
+				</div>
+			</div>
+		</section>
 
-    <!-- Section 2 -->
-    <section class="section" id="section2" aria-label="Working at Manchester Safe House">
-      <div class="content glass">
-        <h2 class="text-line">Working at Manchester Safe House.</h2>
-        <p class="lead text-line">Even if the world had pushed you down —</p>
-        <p class="lead text-line">if the hours behind the wheel left you drained, if the rain soaked through your jacket, if you've been told “no” more times than you can count —</p>
-        <p class="lead text-line">know this: those moments gave you strength. They forged you.</p>
-        <p class="author text-line">Tadju Ratikanga — 1st Sales Representative & Alarm Technician</p>
-        <div class="cta-row text-line">
-          <button class="btn btn-outline">Learn about life at Manchester Safe House</button>
-        </div>
-      </div>
-    </section>
+		<!-- Section 2 -->
+		<section class="section" id="section2" aria-label="Working at Manchester Safe House">
+			<div class="content glass">
+				<p class="lead text-line">I started where many do—long hours, constant rejection, and the sense that success was always out of reach.</p>
+				<p class="lead text-line">I worked nights, knocked in the rain, and heard “no” more times than I can count.</p>
+				<p class="lead text-line">What set me apart wasn’t a résumé.</p>
+				<p class="lead text-line">It was the hunger to succeed as badly as I wanted to breathe.</p>
+				<p class="author text-line">Derek 05 — 5th Sales Representative & Alarm Technician</p>
+				<div class="cta-row text-line">
+					<button class="btn btn-outline">Learn about work at Manchester Safe House</button>
+				</div>
+			</div>
+		</section>
 
-    <!-- Section 3 -->
-    <section class="section" id="section3" aria-label="Value of the grind">
-      <div class="content glass">
-        <p class="lead text-line">The world may not have measured the value of that grind, but it is a jewel. Worth in itself. Proof that you can keep going when others would have quit.</p>
-        <p class="author text-line">Albin Palacios — 2nd Sales Representative & Alarm Technician</p>
-        <div class="cta-row text-line">
-          <button class="btn btn-primary" data-open-modal="#filmModal"><i class="fa-solid fa-play"></i><span>Watch the film</span></button>
-        </div>
-      </div>
-    </section>
+		<!-- Section 3 -->
+		<section class="section" id="section3" aria-label="Value of the grind">
+			<div class="content glass">
+				<p class="lead text-line">My determination turned into opportunity. What once just covered rent now provides for my family and builds a future—like buying a home for my parents.</p>
+				<p class="author text-line">Pedro 04 — 4th Sales Representative & Alarm Technician</p>
+				<div class="cta-row text-line">
+					<button class="btn btn-outline">Learn about life at Manchester Safe House</button>
+				</div>
+			</div>
+		</section>
 
-    <!-- Section 4 -->
-    <section class="section" id="section4" aria-label="Where resilience gathers">
-      <div class="content glass">
-        <p class="lead text-line">This is where those people gather. The ones who drove at 2 a.m. The ones who knocked in the storm. The ones who refused to stay down. You don't get here because of a résumé. You get here because of resilience. Because you kept moving forward.</p>
-        <p class="author text-line">Jose Rivera — 3rd Sales Representative & Alarm Technician</p>
-        <div class="cta-row text-line">
-          <button class="btn btn-outline">Learn about work at Manchester Safe House</button>
-        </div>
-      </div>
-    </section>
+		<!-- Section 4 -->
+		<section class="section" id="section4" aria-label="Where resilience gathers">
+			<div class="content glass">
+				<p class="lead text-line">This work gave me more than a paycheck.</p>
+				<p class="lead text-line">It gave me purpose.</p>
+				<p class="lead text-line">I protect families, serve my community, and deliver real value.</p>
+				<p class="lead text-line">This is where my drive was finally rewarded.</p>
+				<p class="author text-line">Albin 03 — 3rd Sales Representative & Alarm Technician</p>
+				<div class="cta-row text-line">
+					<button class="btn btn-primary" data-open-modal="#filmModal"><i class="fa-solid fa-play"></i><span>Watch the film</span></button>
+				</div>
+			</div>
+		</section>
 
-    <!-- Section 5 -->
-    <section class="section" id="section5" aria-label="Belonging">
-      <div class="content glass">
-        <p class="lead text-line">Here, we don't just sell. We install. We protect our Manchester neighbors. And if you want to succeed as bad as you want to breathe, then you belong here.</p>
-        <p class="author text-line">Brian Webber</p>
-        <div class="cta-row text-line">
-          <button class="btn btn-primary" data-open-modal="#filmModal"><i class="fa-solid fa-play"></i><span>Watch the film</span></button>
-        </div>
-      </div>
-    </section>
-  </main>
+		<!-- Section 5 -->
+		<section class="section" id="section5" aria-label="Belonging">
+			<div class="content glass">
+				<p class="lead text-line">I’m rewriting the life I thought was finished and building something that can’t be erased.</p>
+				<p class="author text-line">Tadju 01 - 1st Sales Representative & Alarm Technician</p>
+				<div class="cta-row text-line">
+					<button class="btn btn-primary" data-open-modal="#filmModal"><i class="fa-solid fa-play"></i><span>Watch the film</span></button>
+				</div>
+			</div>
+		</section>
+	</main>
 
-  <footer role="contentinfo">
-    <p class="copyright">Copyright © Robert Dean Barrett ROBERT DEAN BARRETT LLC 2025</p>
-    <p aria-hidden="true" style="margin-top:.5rem; font-size:.85rem; opacity:.7;">Invite-only. Shared directly by Manchester Safe House.</p>
-  </footer>
+	<footer role="contentinfo">
+		<p class="copyright">Copyright © Robert Dean Barrett ROBERT DEAN BARRETT LLC 2025</p>
+		<p aria-hidden="true" style="margin-top:.5rem; font-size:.85rem; opacity:.7;">Invite-only. Shared directly by Manchester Safe House.</p>
+	</footer>
 
-  <!-- Modal -->
-  <div id="filmModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="filmTitle" aria-describedby="filmDesc" hidden>
-    <div class="glass" style="width:min(720px, 92vw); position:relative;">
-      <button class="btn btn-outline" data-close-modal style="position:absolute; top:.75rem; right:.75rem; padding:.6rem .8rem;" aria-label="Close dialog">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-      <div style="text-align:center; padding-top:1.25rem;">
-        <h2 id="filmTitle" style="margin-bottom:.25rem;">Private Screening</h2>
-        <p id="filmDesc" class="lead" style="opacity:.9">Reserved for invitees. The link you received includes access details.</p>
-        <div style="margin:1.25rem auto 0; width:100%; aspect-ratio:16/9; border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,.1); background:
+	<!-- Modal -->
+	<div id="filmModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="filmTitle" aria-describedby="filmDesc" hidden>
+		<div class="glass" style="width:min(720px, 92vw); position:relative;">
+			<button class="btn btn-outline" data-close-modal style="position:absolute; top:.75rem; right:.75rem; padding:.6rem .8rem;" aria-label="Close dialog">
+				<i class="fa-solid fa-xmark"></i>
+			</button>
+			<div style="text-align:center; padding-top:1.25rem;">
+				<h2 id="filmTitle" style="margin-bottom:.25rem;">Private Screening</h2>
+				<p id="filmDesc" class="lead" style="opacity:.9">Reserved for invitees. The link you received includes access details.</p>
+				<div style="margin:1.25rem auto 0; width:100%; aspect-ratio:16/9; border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,.1); background:
             radial-gradient(120% 120% at 50% 0%, rgba(255,215,94,.15), rgba(255,215,94,.04) 48%, rgba(255,215,94,.02) 100%),
             linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,0));
             display:grid; place-items:center;">
-          <div style="text-align:center; padding:1rem;">
-            <i class="fa-solid fa-lock" style="font-size:2rem; color:var(--gold)"></i>
-            <p class="lead" style="margin:.5rem 0 0;">Access required</p>
-          </div>
-        </div>
-        <div class="cta-row" style="margin-top:1.25rem;">
-          <button class="btn btn-primary" data-close-modal><i class="fa-solid fa-check"></i><span>Got it</span></button>
-        </div>
-      </div>
-    </div>
-  </div>
+					<div style="text-align:center; padding:1rem;">
+						<i class="fa-solid fa-lock" style="font-size:2rem; color:var(--gold)"></i>
+						<p class="lead" style="margin:.5rem 0 0;">Access required</p>
+					</div>
+				</div>
+				<div class="cta-row" style="margin-top:1.25rem;">
+					<button class="btn btn-primary" data-close-modal><i class="fa-solid fa-check"></i><span>Got it</span></button>
+				</div>
+			</div>
+		</div>
+	</div>
 
-  <!-- Asset panel (upload your local files; no external URLs required) -->
-  <button class="asset-toggle" id="assetToggle" aria-label="Assets">
-    <i class="fa-solid fa-wand-magic-sparkles"></i>
-  </button>
-  <div class="asset-panel" id="assetPanel" role="region" aria-label="Asset Loader">
-    <h3>Load your images (stays local)</h3>
+	<!-- Asset panel (upload your local files; no external URLs required) -->
+	<button class="asset-toggle" id="assetToggle" aria-label="Assets">
+		<i class="fa-solid fa-wand-magic-sparkles"></i>
+	</button>
+	<div class="asset-panel" id="assetPanel" role="region" aria-label="Asset Loader">
+		<h3>Load your images (stays local)</h3>
 
-    <label for="logoFile">Logo/Crest PNG (header small mark)</label>
-    <input id="logoFile" type="file" accept="image/*" />
+		<label for="logoFile">Logo/Crest PNG (header small mark)</label>
+		<input id="logoFile" type="file" accept="image/*" />
 
-    <label for="crestFile">Hero Crest PNG (big)</label>
-    <input id="crestFile" type="file" accept="image/*" />
+		<label for="crestFile">Hero Crest PNG (big)</label>
+		<input id="crestFile" type="file" accept="image/*" />
 
-    <label for="bg2File">Section 2 Background</label>
-    <input id="bg2File" type="file" accept="image/*" />
+		<label for="bg2File">Section 2 Background</label>
+		<input id="bg2File" type="file" accept="image/*" />
 
-    <details class="asset-tip" style="margin-top:.75rem;">
-      <summary>Optional: paste URLs (remote or data URIs)</summary>
-      <label for="logoUrl">Logo URL</label>
-      <input id="logoUrl" type="url" placeholder="https://..." />
-      <label for="crestUrl">Crest URL</label>
-      <input id="crestUrl" type="url" placeholder="https://..." />
-      <label for="bg2Url">BG 2 URL</label>
-      <input id="bg2Url" type="url" placeholder="https://..." />
-      <div style="display:flex; gap:.5rem; margin-top:.5rem;">
-        <button class="btn btn-outline" id="applyUrls" type="button"><i class="fa-solid fa-link"></i><span>Apply URLs</span></button>
-        <button class="btn" id="closeAssets" type="button"><i class="fa-solid fa-circle-check"></i><span>Close</span></button>
-      </div>
-    </details>
-  </div>
+		<details class="asset-tip" style="margin-top:.75rem;">
+			<summary>Optional: paste URLs (remote or data URIs)</summary>
+			<label for="logoUrl">Logo URL</label>
+			<input id="logoUrl" type="url" placeholder="https://..." />
+			<label for="crestUrl">Crest URL</label>
+			<input id="crestUrl" type="url" placeholder="https://..." />
+			<label for="bg2Url">BG 2 URL</label>
+			<input id="bg2Url" type="url" placeholder="https://..." />
+			<div style="display:flex; gap:.5rem; margin-top:.5rem;">
+				<button class="btn btn-outline" id="applyUrls" type="button"><i class="fa-solid fa-link"></i><span>Apply URLs</span></button>
+				<button class="btn" id="closeAssets" type="button"><i class="fa-solid fa-circle-check"></i><span>Close</span></button>
+			</div>
+		</details>
+	</div>
 
- 
+
 </body>
+
 </html>
