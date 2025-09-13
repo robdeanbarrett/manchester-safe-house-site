@@ -1,253 +1,350 @@
+// script.js
+document.addEventListener('DOMContentLoaded', () => {
+  const hasGSAP = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
+  const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReducedMotion) document.documentElement.classList.add('prm');
 
-	document.addEventListener('DOMContentLoaded', () => {
-		const hasGSAP = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
-		if (!hasGSAP) return;
-		gsap.registerPlugin(ScrollTrigger);
+  if (hasGSAP) gsap.registerPlugin(ScrollTrigger);
 
-		// Utility: query params (support ?logo=...&crest=...&bg2=...)
-		const params = new URLSearchParams(location.search);
-		const paramLogo = params.get('logo');
-		const paramCrest = params.get('crest');
-		const paramBG2 = params.get('bg2');
+  // Progress bar
+  const progressWrap = document.querySelector('.progress-wrap');
+  const progressBar = document.getElementById('progressBar');
+  let progressHideTimer;
+  const updateProgress = () => {
+    const y = window.scrollY || document.documentElement.scrollTop;
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docH > 0 ? (y / docH) * 100 : 0;
+    progressBar.style.width = pct + '%';
+    progressWrap.style.opacity = 1;
+    clearTimeout(progressHideTimer);
+    progressHideTimer = setTimeout(() => (progressWrap.style.opacity = 0), 700);
+  };
+  document.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
 
-		// Elements
-		const brandLogoEl = document.getElementById('brandLogo');
-		const crestEl = document.getElementById('crestImg');
-		const bgImgs = Array.from(document.querySelectorAll('.bg-img'));
-		const sections = Array.from(document.querySelectorAll('section.section'));
+  // Generalized modal manager
+  const appMain = document.getElementById('main');
+  const appHeader = document.querySelector('header');
 
-		// Safe apply image into <img>
-		function setImg(el, url) {
-			if (!url || !el) return;
-			const temp = new Image();
-			try { temp.crossOrigin = 'anonymous'; } catch (e) {}
-			temp.onload = () => { el.src = url; if (el === brandLogoEl) el.style.display = 'block'; };
-			temp.onerror = () => console.warn('Image failed to load:', url);
-			temp.src = url;
-		}
+  function setAppInert(state) {
+    [appMain, appHeader].forEach(el => {
+      if (!el) return;
+      if (state) {
+        el.setAttribute('aria-hidden', 'true');
+        el.setAttribute('inert', '');
+      } else {
+        el.removeAttribute('aria-hidden');
+        el.removeAttribute('inert');
+      }
+    });
+  }
+  function trapFocus(modal) {
+    const selectors = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    const nodes = Array.from(modal.querySelectorAll(selectors)).filter(el => !el.hasAttribute('disabled'));
+    const first = nodes[0];
+    const last = nodes[nodes.length - 1];
 
-		// Safe apply image into bg stack item (by index)
-		function setBG(index, url) {
-			const img = bgImgs[index];
-			if (!img || !url) return;
-			// We use data-src so existing lazy/preload logic works
-			img.setAttribute('data-src', url);
-			img.removeAttribute('src'); // force fresh load via preload()
-			// If the section is already near viewport, just load now
-			preload(img);
-		}
+    function onKey(e) {
+      if (e.key === 'Escape') { closeModal(modal); }
+      if (e.key !== 'Tab') return;
+      if (nodes.length === 0) { e.preventDefault(); return; }
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+    modal.addEventListener('keydown', onKey);
+    modal._untrap = () => modal.removeEventListener('keydown', onKey);
+  }
+  function openModal(modal) {
+    const el = typeof modal === 'string' ? document.querySelector(modal) : modal;
+    if (!el) return;
+    el.hidden = false;
+    document.body.style.overflow = 'hidden';
+    setAppInert(true);
+    trapFocus(el);
+    (el.querySelector('[data-close-modal]') || el.querySelector('button') || el).focus();
+    el.addEventListener('click', (e) => { if (e.target === el) closeModal(el); }, { once: true });
+    el.querySelectorAll('[data-close-modal]').forEach(btn => btn.addEventListener('click', () => closeModal(el), { once: true }));
+  }
+  function closeModal(modal) {
+    const el = typeof modal === 'string' ? document.querySelector(modal) : modal;
+    if (!el) return;
+    el.hidden = true;
+    if (el._untrap) el._untrap();
+    document.body.style.overflow = '';
+    setAppInert(false);
+  }
+  // data-open-modal triggers
+  document.addEventListener('click', (e) => {
+    const openBtn = e.target.closest('[data-open-modal]');
+    if (openBtn) {
+      const sel = openBtn.getAttribute('data-open-modal');
+      if (sel) {
+        e.preventDefault();
+        openModal(sel);
+      }
+    }
+  });
 
-		// Initial assets from query params (if provided)
-		if (paramLogo) setImg(brandLogoEl, paramLogo);
-		if (paramCrest) setImg(crestEl, paramCrest);
-		if (paramBG2) setBG(1, paramBG2);
+  // Intercept all anchor navigations and show Access modal (except bypass)
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href]');
+    if (!a) return;
+    const href = a.getAttribute('href') || '';
+    const inModal = !!a.closest('.modal-backdrop');
+    const bypass = a.hasAttribute('data-bypass-lock') || href.startsWith('mailto:') || href.startsWith('tel:') || inModal;
+    if (bypass) return;
+    e.preventDefault();
+    openModal('#accessModal');
+  });
 
-		// Progress bar
-		const progressWrap = document.querySelector('.progress-wrap');
-		const progressBar = document.getElementById('progressBar');
-		let progressHideTimer;
-		const updateProgress = () => {
-			const scrollTop = window.scrollY || document.documentElement.scrollTop;
-			const docH = document.documentElement.scrollHeight - window.innerHeight;
-			const pct = docH > 0 ? (scrollTop / docH) * 100 : 0;
-			progressBar.style.width = pct + '%';
-			progressWrap.style.opacity = 1;
-			clearTimeout(progressHideTimer);
-			progressHideTimer = setTimeout(() => progressWrap.style.opacity = 0, 700);
-		};
-		document.addEventListener('scroll', updateProgress, { passive: true });
-		updateProgress();
+  // Lazy-load backgrounds
+  const bgImgs = Array.from(document.querySelectorAll('.bg-img'));
+  const sections = Array.from(document.querySelectorAll('section.section'));
+  function preload(img) {
+    if (!img) return;
+    const dataSrc = img.getAttribute('data-src');
+    const dataSrcset = img.getAttribute('data-srcset');
+    if (!dataSrc) return;
+    const probe = new Image();
+    probe.onload = () => {
+      img.src = dataSrc;
+      if (dataSrcset) img.srcset = dataSrcset;
+      img.removeAttribute('data-src');
+      img.removeAttribute('data-srcset');
+    };
+    probe.onerror = () => console.warn('BG failed:', dataSrc);
+    try { probe.crossOrigin = 'anonymous'; } catch (e) {}
+    probe.src = dataSrc;
+  }
+  if (bgImgs[0]) preload(bgImgs[0]);
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(en => {
+      if (en.isIntersecting) {
+        const idx = Number(en.target.getAttribute('data-index')) || 0;
+        [idx, idx + 1].forEach(k => { if (bgImgs[k]) preload(bgImgs[k]); });
+      }
+    });
+  }, { threshold: 0.15 });
+  sections.forEach((sec, i) => { sec.setAttribute('data-index', i); io.observe(sec); });
 
-		// Ripples
-		const addRipple = (e) => {
-			const btn = e.currentTarget;
-			const rect = btn.getBoundingClientRect();
-			const ripple = document.createElement('span');
-			ripple.className = 'ripple';
-			const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-			const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-			const size = Math.max(rect.width, rect.height);
-			ripple.style.width = ripple.style.height = size + 'px';
-			ripple.style.left = (clientX - rect.left - size / 2) + 'px';
-			ripple.style.top = (clientY - rect.top - size / 2) + 'px';
-			btn.appendChild(ripple);
-			ripple.addEventListener('animationend', () => ripple.remove());
-		};
-		document.querySelectorAll('.btn').forEach(b => {
-			b.addEventListener('click', addRipple, { passive: true });
-			b.addEventListener('touchstart', addRipple, { passive: true });
-		});
+  // Background crossfade
+  function activateBG(index) {
+    if (!hasGSAP) return;
+    bgImgs.forEach((img, i) =>
+      gsap.to(img, {
+        autoAlpha: i === index ? 1 : 0,
+        duration: i === index ? 0.8 : 0.6,
+        ease: 'power2.out',
+        overwrite: 'auto'
+      })
+    );
+  }
+  activateBG(0);
+  if (hasGSAP) {
+    sections.forEach((sec, i) =>
+      ScrollTrigger.create({
+        trigger: sec,
+        start: 'top center',
+        onEnter: () => activateBG(i),
+        onEnterBack: () => activateBG(i)
+      })
+    );
+  }
 
-		// Modal
-		const modal = document.getElementById('filmModal');
-		const openModalButtons = document.querySelectorAll('[data-open-modal], #watchTop');
-		const closeModalButtons = modal.querySelectorAll('[data-close-modal]');
-		let lastFocused = null;
+  // Utility for image readiness
+  function whenImageReady(img) {
+    return new Promise(resolve => {
+      if (img.complete && img.naturalWidth) return resolve(img);
+      img.addEventListener('load', () => resolve(img), { once: true });
+      img.addEventListener('error', () => resolve(img), { once: true });
+    });
+  }
 
-		function trapFocus() {
-			const focusables = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-			const first = focusables[0],
-				last = focusables[focusables.length - 1];
+  // Big motion: pan while zooming out to show full image, reverse on scroll up
+  const effectTweens = [];
+  function clearEffectTweens() {
+    while (effectTweens.length) {
+      const t = effectTweens.pop();
+      try { t.scrollTrigger && t.scrollTrigger.kill(); t.kill && t.kill(); } catch (e) {}
+    }
+  }
 
-			function onKey(e) {
-				if (e.key === 'Escape') { closeModal(); }
-				if (e.key !== 'Tab') return;
-				if (e.shiftKey && document.activeElement === first) { e.preventDefault();
-					last.focus(); } else if (!e.shiftKey && document.activeElement === last) { e.preventDefault();
-					first.focus(); }
-			}
-			modal.addEventListener('keydown', onKey);
-			modal._untrap = () => modal.removeEventListener('keydown', onKey);
-		}
+  async function registerBGEffects() {
+    if (!hasGSAP || prefersReducedMotion) return;
+    clearEffectTweens();
 
-		function openModal() {
-			lastFocused = document.activeElement;
-			modal.hidden = false;
-			document.body.style.overflow = 'hidden';
-			trapFocus();
-			(modal.querySelector('[data-close-modal]') || modal.querySelector('button'))?.focus();
-		}
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
 
-		function closeModal() {
-			modal.hidden = true;
-			if (modal._untrap) modal._untrap();
-			document.body.style.overflow = '';
-			lastFocused && lastFocused.focus();
-		}
-		openModalButtons.forEach(btn => btn.addEventListener('click', openModal));
-		closeModalButtons.forEach(btn => btn.addEventListener('click', closeModal));
-		modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    for (let i = 0; i < bgImgs.length; i++) {
+      const img = bgImgs[i];
+      const sec = sections[i] || sections[sections.length - 1];
 
-		// Background lazy loading
-		const preload = (img) => {
-			if (!img) return;
-			const dataSrc = img.getAttribute('data-src');
-			const dataSrcset = img.getAttribute('data-srcset');
-			if (!dataSrc) return;
-			const probe = new Image();
-			probe.onload = () => {
-				img.src = dataSrc;
-				if (dataSrcset) img.srcset = dataSrcset;
-				img.removeAttribute('data-src');
-				img.removeAttribute('data-srcset');
-			};
-			probe.onerror = () => console.warn('Background failed to load:', dataSrc);
-			try { probe.crossOrigin = 'anonymous'; } catch (e) {}
-			probe.src = dataSrc;
-		};
+      await whenImageReady(img);
+      const iw = img.naturalWidth || vw;
+      const ih = img.naturalHeight || vh;
 
-		// Preload first bg immediately
-		if (bgImgs[0]) preload(bgImgs[0]);
+      const coverScale   = Math.max(vw / iw, vh / ih);
+      const containScale = Math.min(vw / iw, vh / ih);
 
-		// Observe sections to load their bgs
-		const io = new IntersectionObserver((entries) => {
-			entries.forEach(entry => {
-				if (entry.isIntersecting) {
-					const idx = Number(entry.target.getAttribute('data-index')) || 0;
-					if (bgImgs[idx]) preload(bgImgs[idx]);
-				}
-			});
-		}, { threshold: 0.15 });
-		sections.forEach((sec, i) => { sec.setAttribute('data-index', i);
-			io.observe(sec); });
+      const startScale = coverScale * 1.65; // deeper zoom for drama
+      const endScale   = containScale;      // full image visible
 
-		// Cinematic crossfade + parallax
-		function activateBG(index) {
-			bgImgs.forEach((img, i) => {
-				if (i === index) {
-					gsap.to(img, { autoAlpha: 1, scale: 1.02, duration: 1.2, ease: "power2.out" });
-				} else {
-					gsap.to(img, { autoAlpha: 0, scale: 1.08, duration: 1, ease: "power2.out" });
-				}
-			});
-		}
-		activateBG(0);
+      const endWidth  = iw * endScale;
+      const endHeight = ih * endScale;
+      const safeSpanX = Math.max(0, (vw - endWidth) / 2);
+      const safeSpanY = Math.max(0, (vh - endHeight) / 2);
+      const minFallback = 80;
+      const spanX = safeSpanX > 0 ? safeSpanX : minFallback;
+      const spanY = safeSpanY > 0 ? safeSpanY : minFallback;
 
-		bgImgs.forEach((img, i) => {
-			gsap.to(img, {
-				yPercent: 12,
-				ease: "none",
-				scrollTrigger: {
-					trigger: sections[i] || sections[sections.length - 1],
-					start: "top bottom",
-					end: "bottom top",
-					scrub: true
-				}
-			});
-		});
+      const effect = (sec && sec.dataset && sec.dataset.bgEffect ? sec.dataset.bgEffect : (document.body.dataset && document.body.dataset.bgEffect) || 'panx').toLowerCase();
+      const amtAttr = sec && sec.dataset ? Number(sec.dataset.bgAmt) : NaN;
+      const amtMul = isNaN(amtAttr) ? 1 : Math.max(0.25, Math.min(2.0, amtAttr / 10));
 
-		sections.forEach((sec, i) => {
-			const content = sec.querySelector('.content');
-			const lines = gsap.utils.toArray(sec.querySelectorAll('.text-line'));
-			const tl = gsap.timeline({
-				scrollTrigger: {
-					trigger: sec,
-					start: "top 65%",
-					end: "top 30%",
-					toggleActions: "play none none reverse"
-				}
-			});
-			tl.to(content, { autoAlpha: 1, y: 0, duration: .9, ease: "power2.out" });
-			if (lines.length) {
-				tl.from(lines, { y: 28, autoAlpha: 0, stagger: .18, duration: .6, ease: "power2.out" }, "-=.35");
-			}
-			ScrollTrigger.create({
-				trigger: sec,
-				start: "top center",
-				onEnter: () => activateBG(i),
-				onEnterBack: () => activateBG(i)
-			});
-		});
+      const baseFrom = { xPercent: -50, yPercent: -50, scale: startScale, transformOrigin: 'center center' };
+      const baseTo   = { xPercent: -50, yPercent: -50, scale: endScale };
 
-		// Asset panel logic (lets you load local files; works on iPad too)
-		const assetToggle = document.getElementById('assetToggle');
-		const assetPanel = document.getElementById('assetPanel');
-		const logoFile = document.getElementById('logoFile');
-		const crestFile = document.getElementById('crestFile');
-		const bg2File = document.getElementById('bg2File');
-		const applyUrlsBtn = document.getElementById('applyUrls');
-		const closeAssetsBtn = document.getElementById('closeAssets');
-		const logoUrl = document.getElementById('logoUrl');
-		const crestUrl = document.getElementById('crestUrl');
-		const bg2Url = document.getElementById('bg2Url');
+      let fromProps = { ...baseFrom };
+      let toProps   = { ...baseTo };
 
-		assetToggle.addEventListener('click', () => assetPanel.classList.toggle('open'));
-		closeAssetsBtn.addEventListener('click', () => assetPanel.classList.remove('open'));
+      switch (effect) {
+        case 'pany':
+          fromProps.y = -spanY * amtMul; toProps.y = spanY * amtMul;
+          fromProps.x = 0; toProps.x = 0;
+          break;
+        case 'diagonal':
+          fromProps.x = -spanX * amtMul; toProps.x = spanX * amtMul;
+          fromProps.y = -spanY * amtMul; toProps.y = spanY * amtMul;
+          break;
+        case 'rotate':
+          fromProps.rotation = -8; toProps.rotation = 8;
+          fromProps.x = -spanX * 0.4 * amtMul; toProps.x = spanX * 0.4 * amtMul;
+          fromProps.y = -spanY * 0.25 * amtMul; toProps.y = spanY * 0.25 * amtMul;
+          break;
+        case 'parallaxy':
+          fromProps.y = -spanY * 0.6 * amtMul; toProps.y = spanY * 0.6 * amtMul;
+          fromProps.x = 0; toProps.x = 0;
+          break;
+        case 'zoomin':
+        case 'zoomout':
+          fromProps.x = -spanX * 0.15 * amtMul; toProps.x = spanX * 0.15 * amtMul;
+          fromProps.y = 0; toProps.y = 0;
+          break;
+        case 'panx':
+        default:
+          fromProps.x = -spanX * amtMul; toProps.x = spanX * amtMul;
+          fromProps.y = 0; toProps.y = 0;
+          break;
+      }
 
-		function fileToURL(file, cb) {
-			if (!file) return;
-			const url = URL.createObjectURL(file);
-			cb(url);
-		}
+      const tween = gsap.fromTo(img, fromProps, {
+        ...toProps,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: sec,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 0.6,
+          invalidateOnRefresh: true
+        }
+      });
+      effectTweens.push(tween);
+    }
+  }
 
-		logoFile.addEventListener('change', (e) => {
-			const f = e.target.files?.[0];
-			if (!f) return;
-			fileToURL(f, (url) => { setImg(brandLogoEl, url); });
-		});
+  registerBGEffects();
 
-		crestFile.addEventListener('change', (e) => {
-			const f = e.target.files?.[0];
-			if (!f) return;
-			fileToURL(f, (url) => { setImg(crestEl, url); });
-		});
+  let resizeTO;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTO);
+    resizeTO = setTimeout(() => {
+      if (hasGSAP) {
+        ScrollTrigger.getAll().forEach(st => {
+          const trg = st.vars && st.vars.trigger;
+          if (trg && trg.classList && trg.classList.contains('section')) st.kill();
+        });
+      }
+      registerBGEffects().then(() => {
+        if (hasGSAP) {
+          sections.forEach((sec, i) =>
+            ScrollTrigger.create({
+              trigger: sec,
+              start: 'top center',
+              onEnter: () => activateBG(i),
+              onEnterBack: () => activateBG(i)
+            })
+          );
+          ScrollTrigger.refresh();
+        }
+      });
+    }, 150);
+  });
 
-		bg2File.addEventListener('change', (e) => {
-			const f = e.target.files?.[0];
-			if (!f) return;
-			fileToURL(f, (url) => { setBG(1, url); });
-		});
+  // Entrance for hero and quotes
+  if (hasGSAP) {
+    gsap.to('.content.center', { autoAlpha: 1, y: 0, duration: 0.45, ease: 'power2.out', delay: 0.2 });
+  } else {
+    document.querySelectorAll('.content.center').forEach(el => { el.style.opacity = 1; el.style.transform = 'none'; });
+  }
 
-		applyUrlsBtn.addEventListener('click', () => {
-			if (logoUrl.value) setImg(brandLogoEl, logoUrl.value.trim());
-			if (crestUrl.value) setImg(crestEl, crestUrl.value.trim());
-			if (bg2Url.value) setBG(1, bg2Url.value.trim());
-		});
+  const SPEED_MULTIPLIER = 0.25;
+  function estimateReadTime(text) {
+    const words = (text || '').trim().split(/\s+/).filter(Boolean).length;
+    const seconds = words * 0.25 * SPEED_MULTIPLIER;
+    return Math.min(1.0, Math.max(0.35, seconds));
+  }
+  function sequenceSection(section) {
+    const content = section.querySelector('.content.quote');
+    if (!content) return;
+    const lines = Array.from(content.querySelectorAll('.text-line'));
+    const cta = content.querySelector('.cta-line') || content.querySelector('.cta-row');
 
-		// Keyboard quick-open for assets (press A)
-		document.addEventListener('keydown', (e) => {
-			if ((e.key === 'a' || e.key === 'A') && !e.metaKey && !e.ctrlKey && !e.altKey) {
-				assetPanel.classList.toggle('open');
-			}
-		});
-	}); 
+    function resetToStart() {
+      if (!hasGSAP) return;
+      gsap.set(content, { autoAlpha: 0, y: 24 });
+      gsap.set(lines, { autoAlpha: 0, y: 64 });
+      if (cta) gsap.set(cta, { autoAlpha: 0, y: 56 });
+    }
+    if (hasGSAP) resetToStart();
+
+    if (!hasGSAP || prefersReducedMotion) {
+      content.style.opacity = 1; content.style.transform = 'none';
+      lines.forEach(l => { l.style.opacity = 1; l.style.transform = 'none'; });
+      if (cta) { cta.style.opacity = 1; cta.style.transform = 'none'; }
+      return;
+    }
+
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo(content, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.35, ease: 'power2.out' }, 0);
+    lines.forEach((el, idx) => {
+      tl.fromTo(el, { autoAlpha: 0, y: 64 }, { autoAlpha: 1, y: 0, duration: 0.22, ease: 'power3.out' }, idx === 0 ? '+=0.08' : '>');
+      tl.to({}, { duration: estimateReadTime(el.textContent || '') });
+    });
+    if (cta) tl.fromTo(cta, { autoAlpha: 0, y: 56 }, { autoAlpha: 1, y: 0, duration: 0.25, ease: 'power3.out' }, '>');
+
+    ScrollTrigger.create({
+      trigger: section,
+      start: 'top 68%',
+      end: 'bottom top',
+      onEnter: () => tl.restart(true),
+      onEnterBack: () => tl.restart(true),
+      onLeave: () => { tl.pause(0); resetToStart(); },
+      onLeaveBack: () => { tl.pause(0); resetToStart(); }
+    });
+  }
+  document.querySelectorAll('.section').forEach(sequenceSection);
+
+  // Scrollspy for nav
+  const navLinks = Array.from(document.querySelectorAll('.nav-right a'));
+  const spy = new IntersectionObserver((entries) => {
+    entries.forEach(en => {
+      if (en.isIntersecting) {
+        navLinks.forEach(a => a.removeAttribute('aria-current'));
+        const active = navLinks.find(a => a.getAttribute('href') === `#${en.target.id}`);
+        if (active) active.setAttribute('aria-current', 'true');
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px', threshold: 0.01 });
+  sections.forEach(s => spy.observe(s));
+});
