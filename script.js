@@ -14,10 +14,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const y = window.scrollY || document.documentElement.scrollTop;
     const docH = document.documentElement.scrollHeight - window.innerHeight;
     const pct = docH > 0 ? (y / docH) * 100 : 0;
-    progressBar.style.width = pct + '%';
-    progressWrap.style.opacity = 1;
-    clearTimeout(progressHideTimer);
-    progressHideTimer = setTimeout(() => (progressWrap.style.opacity = 0), 700);
+    if (progressBar) progressBar.style.width = pct + '%';
+    if (progressWrap) {
+      progressWrap.style.opacity = 1;
+      clearTimeout(progressHideTimer);
+      progressHideTimer = setTimeout(() => (progressWrap.style.opacity = 0), 700);
+    }
   };
   document.addEventListener('scroll', updateProgress, { passive: true });
   updateProgress();
@@ -47,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function onKey(e) {
       if (e.key === 'Escape') { closeModal(modal); }
       if (e.key !== 'Tab') return;
-      if (nodes.length === 0) { e.preventDefault(); return; }
+      if (!nodes.length) { e.preventDefault(); return; }
       if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
       else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     }
@@ -85,13 +87,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Intercept all anchor navigations and show Access modal (except bypass)
+  // Intercept anchor navigations and show Access modal (except bypass or same-page hash)
   document.addEventListener('click', (e) => {
     const a = e.target.closest('a[href]');
     if (!a) return;
     const href = a.getAttribute('href') || '';
     const inModal = !!a.closest('.modal-backdrop');
-    const bypass = a.hasAttribute('data-bypass-lock') || href.startsWith('mailto:') || href.startsWith('tel:') || inModal;
+    const isHash = href.startsWith('#');
+    const bypass = a.hasAttribute('data-bypass-lock') || href.startsWith('mailto:') || href.startsWith('tel:') || inModal || isHash;
     if (bypass) return;
     e.preventDefault();
     openModal('#accessModal');
@@ -347,4 +350,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, { rootMargin: '-40% 0px -55% 0px', threshold: 0.01 });
   sections.forEach(s => spy.observe(s));
+
+  // Mark JS ready (keep no-js fallback if any error prevented reaching here)
+  try {
+    requestAnimationFrame(() => {
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    });
+  } catch (e) {}
 });
