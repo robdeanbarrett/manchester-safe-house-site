@@ -24,7 +24,7 @@
       margin:0;
       font-family:Inter, -apple-system, system-ui, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--text);
-      background:var(--bg);
+      background:#000; /* explicit black at load */
       overflow-x:hidden;
     }
 
@@ -42,12 +42,12 @@
     }
     .bg-img{
       position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
-      opacity:0; transform:translateZ(0); will-change:transform,opacity;
+      opacity:0; transform:translateZ(0); will-change:transform, opacity;
       filter:saturate(105%) contrast(105%) brightness(90%);
       transition:opacity .6s var(--ease);
       z-index:0;
     }
-    .bg-img.top{ z-index:2; } /* ensure bg0 overlays bg2 during reveal */
+    .bg-img.top{ z-index:2 } /* bg0 sits above others during reveal */
     .bg-overlay{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.58), rgba(0,0,0,.35) 45%, rgba(0,0,0,.58)) }
     .grain{
       position:absolute; inset:-50%; opacity:.06; mix-blend-mode:soft-light; pointer-events:none;
@@ -56,13 +56,13 @@
     }
     @keyframes grain{ 0%{ transform:translate3d(0,0,0) } 100%{ transform:translate3d(-10%,-10%,0) } }
 
-    /* Apple-like header */
+    /* Apple-like header (must slide from top) */
     .apple-header{
       position:fixed; inset-inline:0; top:0; z-index:60;
       background:linear-gradient(180deg, rgba(10,10,11,.75), rgba(10,10,11,.35) 70%, rgba(10,10,11,0));
       -webkit-backdrop-filter:blur(10px) saturate(120%); backdrop-filter:blur(10px) saturate(120%);
       border-bottom:1px solid rgba(255,255,255,.08);
-      transform:translateY(-100%); opacity:0; /* slide-in initial state */
+      transform:translateY(-100%); opacity:0; /* hidden until GSAP slides in */
     }
     .apple-header .inner{
       max-width:1280px; margin:0 auto; display:flex; align-items:center; justify-content:space-between;
@@ -94,7 +94,7 @@
     .crest{
       width:min(560px, 70vw); height:auto; margin:0 auto 1.25rem; display:block;
       filter:drop-shadow(0 28px 60px rgba(0,0,0,.6));
-      opacity:0; transform:scale(.9);
+      opacity:0; transform:scale(.9); /* appears from center */
     }
     h1{
       font-weight:900; letter-spacing:-.02em; line-height:1.05;
@@ -129,9 +129,9 @@
       transform:translateY(40px); opacity:0
     }
 
-    .intro-title, .intro-cta{ opacity:0; transform:translateY(60px) }
+    .intro-title, .intro-cta{ opacity:0; transform:translateY(60px) } /* scroll-in from bottom */
 
-    /* Initial black overlay */
+    /* Initial black overlay, removed after entrance */
     .black-overlay{ position:fixed; inset:0; background:#000; z-index:30; pointer-events:none }
 
     /* No-JS fallback */
@@ -417,6 +417,20 @@
       updateProgress();
 
       const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReduced) {
+        // graceful fallback
+        const black = document.getElementById('blackOverlay');
+        black.style.display='none';
+        document.querySelector('.apple-header').style.transform='none';
+        document.querySelector('.apple-header').style.opacity='1';
+        document.querySelector('.crest').style.opacity='1';
+        document.querySelector('.intro-title').style.opacity='1';
+        document.querySelector('.intro-cta').style.opacity='1';
+        const bgs = document.querySelectorAll('.bg-img');
+        bgs.forEach((img,i)=> img.style.opacity = (i===2 || i===0) ? 1 : 0);
+        return;
+      }
+
       const hasGSAP = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
       if (!hasGSAP) return;
       gsap.registerPlugin(ScrollTrigger);
@@ -430,32 +444,29 @@
       const bg0 = bgs[0];
       const bg2 = bgs[2];
 
-      // Initial states: all hidden, bg2 visible underneath, bg0 fades in
+      // Initial visual states:
+      // - All backgrounds hidden, show bg2 underneath (revealed later), bg0 on top hidden.
       gsap.set(bgs, { opacity: 0 });
-      if (bg2) gsap.set(bg2, { opacity: 1 }); // underlying static
-      if (bg0) gsap.set(bg0, { opacity: 0, yPercent: 0 }); // will fade in then scroll up
-      gsap.set([introTitle, introCta], { opacity: 0, y: 60 });
+      if (bg2) gsap.set(bg2, { opacity: 1 });
+      if (bg0) gsap.set(bg0, { opacity: 0, yPercent: 0 });
+
+      // Crest and texts hidden; header off-screen
+      gsap.set(header, { yPercent: -100, opacity: 0 });
       gsap.set(crest, { opacity: 0, scale: 0.9 });
+      gsap.set([introTitle, introCta], { opacity: 0, y: 60 });
 
-      // Entrance timeline
-      if (!prefersReduced){
-        const tl = gsap.timeline();
-        tl.to(header, { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }, 0.1) // nav slides in
-          .to(crest, { opacity: 1, scale: 1, duration: 0.8, ease: 'power3.out' }, 0.2) // crest appears
-          .to(bg0, { opacity: 1, duration: 0.8, ease: 'power2.out' }, 0.2) // bg0 fades in
-          .to(introTitle, { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' }, 0.45) // title in
-          .to(introCta, { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' }, 0.55) // cta in
-          .to(black, { opacity: 0, duration: 0.9, ease: 'power2.out', onComplete(){ black.style.display='none'; }}, 0.0); // fade from black
-      } else {
-        black.style.display='none';
-        header.style.transform='none'; header.style.opacity='1';
-        crest.style.opacity='1'; crest.style.transform='none';
-        bg0.style.opacity='1';
-        introTitle.style.opacity='1'; introTitle.style.transform='none';
-        introCta.style.opacity='1'; introCta.style.transform='none';
-      }
+      // Entrance sequence (strict order to match requested behavior)
+      const enterTL = gsap.timeline();
+      enterTL
+        // keep black visible initially, then fade while other elements animate so user sees them appear
+        .to(header, { yPercent: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }, 0.1)        // nav slides in
+        .to(crest, { opacity: 1, scale: 1, duration: 0.8, ease: 'power3.out' }, 0.25)           // crest appears from center
+        .to(bg0, { opacity: 1, duration: 0.8, ease: 'power2.out' }, 0.3)                         // bg0 fades in
+        .to(introTitle, { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' }, 0.5)           // title in from bottom
+        .to(introCta, { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' }, 0.6)             // cta in from bottom
+        .to(black, { opacity: 0, duration: 0.6, ease: 'power2.out', onComplete(){ black.style.display='none'; }}, 0.35);
 
-      // Intro scroll segment: crest + CTA fade out and bg0 scrolls up revealing bg2
+      // Intro scroll: only bg0 scrolls upward to reveal bg2; crest + CTA fade out but do not move.
       const introST = ScrollTrigger.create({
         trigger: '#intro',
         start: 'top top',
@@ -463,13 +474,13 @@
         scrub: 0.6,
         pin: true
       });
-      gsap.timeline({ scrollTrigger: introST })
-        .to(crest, { opacity: 0, duration: 0.5, ease: 'power1.out' }, 0.05)
-        .to(introCta, { opacity: 0, duration: 0.5, ease: 'power1.out' }, 0.05)
+      const introScrollTL = gsap.timeline({ scrollTrigger: introST });
+      introScrollTL
+        .to([crest, introCta], { opacity: 0, duration: 0.5, ease: 'power1.out' }, 0.05) // fade out, remain in place
         .to(bg0, { yPercent: -100, ease: 'none' }, 0); // only bg0 moves up
 
-      // Helper to create quote timelines (lines reveal while pinned)
-      function makeQuoteTL({ id, bgIndex, prevIndex, rotateOut = false, driftY = -6, driftScale = 1.04 }){
+      // Helper for quote sections (reveal lines while pinned)
+      function makeQuoteTL({ id, bgIndex, prevIndex, driftY = -6, driftScale = 1.04 }){
         const sec = document.querySelector(id);
         if (!sec) return;
         const lines = sec.querySelectorAll('.quote-line');
@@ -482,7 +493,6 @@
             scrub: 0.6,
             pin: true,
             onEnter: () => {
-              // hide all except current bgIndex
               bgs.forEach((img, i)=> gsap.to(img, { opacity: i === bgIndex ? 1 : 0, duration: 0.6, ease: 'power2.out', overwrite: 'auto' }));
             },
             onEnterBack: () => {
@@ -503,8 +513,7 @@
         if (author) tl.to(author, { opacity: 1, y: 0, duration: 0.25, ease: 'power2.out' }, lines.length * 0.22 + 0.12);
       }
 
-      // Quote mapping:
-      // After intro: bg2 stays, then bg3..bg8 for subsequent quotes
+      // Quote mapping (bg2 is revealed beneath bg0 and powers Quote1)
       makeQuoteTL({ id: '#quote1', bgIndex: 2, prevIndex: 0, driftY: -6, driftScale: 1.05 });
       makeQuoteTL({ id: '#quote2', bgIndex: 3, prevIndex: 2, driftY: -8, driftScale: 1.04 });
       makeQuoteTL({ id: '#quote3', bgIndex: 4, prevIndex: 3, driftY: -4, driftScale: 1.02 });
@@ -514,7 +523,7 @@
       makeQuoteTL({ id: '#quote7', bgIndex: 8, prevIndex: 7, driftY: -3, driftScale: 1.02 });
       makeQuoteTL({ id: '#quote8', bgIndex: 8, prevIndex: 8, driftY: -4, driftScale: 1.02 });
 
-      // Scrollspy for header nav (visual only; clicks still open modal)
+      // Scrollspy (visual only; clicks still open modal)
       const navLinks = Array.from(document.querySelectorAll('.nav-right a'));
       const spy = new IntersectionObserver((entries)=>{
         entries.forEach(en=>{
