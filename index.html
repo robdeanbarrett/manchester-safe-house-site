@@ -1,814 +1,584 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>Manchester Safe House -- Join us. Be you.</title>
-	<meta name="description" content="Join Manchester Safe House. Purposeful work protecting families and serving our community." />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Manchester Safe House -- Join us. Be you.</title>
+  <meta name="description" content="Join Manchester Safe House. Purposeful work protecting families and serving our community." />
 
-	<link rel="preconnect" href="https://fonts.googleapis.com" />
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet" />
 
-	<style>
-		:root {
-			--bg: #0a0a0b;
-			--text: #f5f7fb;
-			--muted: #cfd5df;
-			--gold: #ffd75e;
-			--ease: cubic-bezier(.22, .61, .36, 1);
-		}
+  <style>
+    :root {
+      --bg: #0a0a0b;
+      --text: #f5f7fb;
+      --muted: #cfd5df;
+      --gold: #ffd75e;
+      --ease: cubic-bezier(.22, .61, .36, 1);
+    }
 
-		* {
-			box-sizing: border-box
-		}
+    * { box-sizing: border-box }
 
-		html,
-		body {
-			height: 100%
-		}
+    html, body { height: 100% }
 
-		html {
-			scroll-behavior: smooth
-		}
+    html { scroll-behavior: smooth }
 
-		body {
-			margin: 0;
-			font-family: Inter, -apple-system, system-ui, Segoe UI, Roboto, Arial, sans-serif;
-			color: var(--text);
-			background: var(--bg);
-			overflow-x: hidden;
-		}
+    body {
+      margin: 0;
+      font-family: Inter, -apple-system, system-ui, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      overflow-x: hidden;
+    }
 
-		/* Skip link */
-		.skip-link {
-			position: absolute;
-			left: -9999px;
-			top: auto;
-			width: 1px;
-			height: 1px;
-			overflow: hidden
-		}
+    /* Skip link */
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden
+    }
+    .skip-link:focus {
+      left: 1rem; top: 1rem; width: auto; height: auto; padding: .5rem .75rem;
+      background: #111; color: #fff; border-radius: .5rem; z-index: 100
+    }
 
-		.skip-link:focus {
-			left: 1rem;
-			top: 1rem;
-			width: auto;
-			height: auto;
-			padding: .5rem .75rem;
-			background: #111;
-			color: #fff;
-			border-radius: .5rem;
-			z-index: 100
-		}
+    /* Background stack */
+    .bg-stack {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      background:
+        radial-gradient(950px 420px at 85% -10%, rgba(255, 215, 94, .08), transparent 60%),
+        radial-gradient(900px 520px at 5% 110%, rgba(255, 215, 94, .05), transparent 60%),
+        linear-gradient(180deg, #0a0a0b, #0b0b0c 60%, #0a0a0b);
+    }
+    .bg-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transform: scale(1) translateZ(0);
+      will-change: transform, opacity;
+      filter: saturate(105%) contrast(105%) brightness(90%);
+      transition: opacity .6s var(--ease);
+    }
+    .bg-img.is-initial { opacity: 1 }
+    .bg-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0, 0, 0, .58), rgba(0, 0, 0, .35) 45%, rgba(0, 0, 0, .58))
+    }
+    .grain {
+      position: absolute; inset: -50%; opacity: .06; mix-blend-mode: soft-light; pointer-events: none;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="120" height="120" filter="url(%23n)"/></svg>');
+      background-size: 220px 220px; animation: grain 12s linear infinite;
+    }
+    @keyframes grain { 0% { transform: translate3d(0,0,0) } 100% { transform: translate3d(-10%, -10%, 0) } }
 
-		/* Background stack */
-		.bg-stack {
-			position: fixed;
-			inset: 0;
-			z-index: 0;
-			pointer-events: none;
-			overflow: hidden;
-			background:
-				radial-gradient(950px 420px at 85% -10%, rgba(255, 215, 94, .08), transparent 60%),
-				radial-gradient(900px 520px at 5% 110%, rgba(255, 215, 94, .05), transparent 60%),
-				linear-gradient(180deg, #0a0a0b, #0b0b0c 60%, #0a0a0b);
-		}
+    /* Apple-like header */
+    .apple-header {
+      position: fixed; inset-inline: 0; top: 0; z-index: 60;
+      background: linear-gradient(180deg, rgba(10, 10, 11, .75), rgba(10, 10, 11, .35) 70%, rgba(10, 10, 11, 0));
+      -webkit-backdrop-filter: blur(10px) saturate(120%);
+      backdrop-filter: blur(10px) saturate(120%);
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+    }
+    .apple-header .inner {
+      max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between;
+      height: 60px; padding: 0 16px;
+    }
+    .brand-left { font-weight: 800; letter-spacing: .2px; font-size: 1.05rem; color: #e9edf6; }
+    .brand-left .accent { font-weight: 900; }
+    .nav-right { display: flex; align-items: center; gap: 22px; }
+    .nav-right a {
+      color: #e6ebf6; text-decoration: none; font-size: .9rem; opacity: .85; transition: opacity .25s var(--ease);
+    }
+    .nav-right a:hover { opacity: 1; }
+    .nav-right a[aria-current="true"] { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
+    .search-pill {
+      border: none; border-radius: 999px; padding: .45rem .85rem; font-weight: 700; font-size: .85rem;
+      background: #ffffff; color: #0b0b0c; box-shadow: 0 4px 14px rgba(0, 0, 0, .3); cursor: pointer;
+      transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+    }
+    .search-pill:hover { transform: translateY(-1px); box-shadow: 0 10px 20px rgba(0, 0, 0, .35) }
 
-		.bg-img {
-			position: absolute;
-			inset: 0;
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
-			opacity: 0;
-			transform: scale(1) translateZ(0);
-			will-change: transform, opacity;
-			filter: saturate(105%) contrast(105%) brightness(90%);
-			transition: opacity .6s var(--ease);
-		}
+    /* Progress bar */
+    .progress-wrap {
+      position: fixed; top: 0; left: 0; height: 3px; width: 100%; z-index: 65; pointer-events: none
+    }
+    .progress {
+      height: 100%; width: 0%; background: linear-gradient(90deg, #6c5, #ffd75e, #f8e07a);
+      box-shadow: 0 0 18px rgba(255, 215, 94, .55)
+    }
 
-		.bg-img.is-initial {
-			opacity: 1
-		}
+    /* Sections */
+    main { position: relative; z-index: 5 }
+    section {
+      min-height: 100vh; display: grid; place-items: center; padding: 6rem 1rem 4rem
+    }
+    @supports (height: 100svh) { section { min-height: 100svh } }
 
-		.bg-overlay {
-			position: absolute;
-			inset: 0;
-			background: linear-gradient(180deg, rgba(0, 0, 0, .58), rgba(0, 0, 0, .35) 45%, rgba(0, 0, 0, .58))
-		}
+    .content { width: min(1100px, 92vw); text-align: center }
 
-		.grain {
-			position: absolute;
-			inset: -50%;
-			opacity: .06;
-			mix-blend-mode: soft-light;
-			pointer-events: none;
-			background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="120" height="120" filter="url(%23n)"/></svg>');
-			background-size: 220px 220px;
-			animation: grain 12s linear infinite;
-		}
+    .crest {
+      width: min(560px, 70vw); height: auto; margin: 0 auto 1.25rem; display: block;
+      filter: drop-shadow(0 28px 60px rgba(0, 0, 0, .6));
+      opacity: 0; transform: scale(.9);
+    }
 
-		@keyframes grain {
-			0% {
-				transform: translate3d(0, 0, 0)
-			}
+    h1 {
+      font-weight: 900; letter-spacing: -.02em; line-height: 1.05;
+      font-size: clamp(2rem, 2rem + 4vw, 5rem); margin: 0 0 1rem;
+      text-shadow: 0 2px 28px rgba(0, 0, 0, .45)
+    }
+    .gold { color: var(--gold); text-shadow: 0 0 22px rgba(255, 215, 94, .25) }
 
-			100% {
-				transform: translate3d(-10%, -10%, 0)
-			}
-		}
+    .cta-row {
+      display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: .75rem; flex-wrap: wrap
+    }
+    .btn {
+      appearance: none; border: none; border-radius: 999px; padding: .85rem 1.2rem;
+      background: #ffffff; color: #0b0b0c; font-weight: 700; font-size: 1rem;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, .35); cursor: pointer; text-decoration: none; display: inline-block
+    }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 16px 32px rgba(0, 0, 0, .45) }
+    .link { color: #eef2f9; text-decoration: none; font-weight: 700; font-size: 1rem; opacity: .95 }
+    .link:hover { opacity: 1; text-decoration: underline; text-underline-offset: 4px }
 
-		/* Apple-like header */
-		.apple-header {
-			position: fixed;
-			inset-inline: 0;
-			top: 0;
-			z-index: 60;
-			background: linear-gradient(180deg, rgba(10, 10, 11, .75), rgba(10, 10, 11, .35) 70%, rgba(10, 10, 11, 0));
-			-webkit-backdrop-filter: blur(10px) saturate(120%);
-			backdrop-filter: blur(10px) saturate(120%);
-			border-bottom: 1px solid rgba(255, 255, 255, .08);
-		}
+    /* Quotes */
+    .quote-wrap { text-align: left; margin-inline: auto; width: min(1100px, 92vw) }
+    .quote-lines { margin: 0; padding: 0; list-style: none }
+    .quote-line {
+      margin: .12rem 0; padding: 0;
+      font-size: clamp(1.4rem, 1.1rem + 2.8vw, 3rem);
+      font-weight: 800; letter-spacing: -.01em; line-height: 1.18;
+      opacity: 0; transform: translateY(60px);
+      text-shadow: 0 2px 28px rgba(0, 0, 0, .45);
+    }
+    .author {
+      margin: .95rem 0 0; color: #e6e9f3; font-weight: 600;
+      font-size: clamp(1rem, .9rem + .45vw, 1.1rem);
+      transform: translateY(40px); opacity: 0
+    }
 
-		.apple-header .inner {
-			max-width: 1280px;
-			margin: 0 auto;
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			height: 60px;
-			padding: 0 16px;
-		}
+    .intro-title, .intro-cta { opacity: 0; transform: translateY(40px) }
 
-		.brand-left {
-			font-weight: 800;
-			letter-spacing: .2px;
-			font-size: 1.05rem;
-			color: #e9edf6;
-		}
+    /* Initial black overlay */
+    .black-overlay {
+      position: fixed; inset: 0; background: #000; z-index: 30; pointer-events: none
+    }
 
-		.brand-left .accent {
-			font-weight: 900;
-		}
+    /* No-JS fallback */
+    .no-js .bg-img { opacity: 1 !important }
+    .no-js .intro-title, .no-js .intro-cta, .no-js .crest, .no-js .quote-line, .no-js .author {
+      opacity: 1 !important; transform: none !important
+    }
 
-		.nav-right {
-			display: flex;
-			align-items: center;
-			gap: 22px;
-		}
+    @media (prefers-reduced-motion: reduce) {
+      .bg-img, .quote-line, .author, .crest, .intro-title, .intro-cta {
+        transition: none !important; animation: none !important
+      }
+    }
 
-		.nav-right a {
-			color: #e6ebf6;
-			text-decoration: none;
-			font-size: .9rem;
-			opacity: .85;
-			transition: opacity .25s var(--ease);
-		}
-
-		.nav-right a:hover {
-			opacity: 1;
-		}
-
-		.nav-right a[aria-current="true"] {
-			opacity: 1;
-			text-decoration: underline;
-			text-underline-offset: 4px;
-		}
-
-		.search-pill {
-			border: none;
-			border-radius: 999px;
-			padding: .45rem .85rem;
-			font-weight: 700;
-			font-size: .85rem;
-			background: #ffffff;
-			color: #0b0b0c;
-			box-shadow: 0 4px 14px rgba(0, 0, 0, .3);
-			cursor: pointer;
-			transition: transform .2s var(--ease), box-shadow .2s var(--ease);
-		}
-
-		.search-pill:hover {
-			transform: translateY(-1px);
-			box-shadow: 0 10px 20px rgba(0, 0, 0, .35)
-		}
-
-		/* Progress bar */
-		.progress-wrap {
-			position: fixed;
-			top: 0;
-			left: 0;
-			height: 3px;
-			width: 100%;
-			z-index: 65;
-			pointer-events: none
-		}
-
-		.progress {
-			height: 100%;
-			width: 0%;
-			background: linear-gradient(90deg, #6c5, #ffd75e, #f8e07a);
-			box-shadow: 0 0 18px rgba(255, 215, 94, .55)
-		}
-
-		/* Sections */
-		main {
-			position: relative;
-			z-index: 5
-		}
-
-		section {
-			min-height: 100vh;
-			display: grid;
-			place-items: center;
-			padding: 6rem 1rem 4rem
-		}
-
-		@supports (height: 100svh) {
-			section {
-				min-height: 100svh
-			}
-		}
-
-		.content {
-			width: min(1100px, 92vw);
-			text-align: center
-		}
-
-		.crest {
-			width: min(560px, 70vw);
-			height: auto;
-			margin: 0 auto 1.25rem;
-			display: block;
-			filter: drop-shadow(0 28px 60px rgba(0, 0, 0, .6));
-			opacity: 0;
-			transform: scale(.9);
-		}
-
-		h1 {
-			font-weight: 900;
-			letter-spacing: -.02em;
-			line-height: 1.05;
-			font-size: clamp(2rem, 2rem + 4vw, 5rem);
-			margin: 0 0 1rem;
-			text-shadow: 0 2px 28px rgba(0, 0, 0, .45)
-		}
-
-		.gold {
-			color: var(--gold);
-			text-shadow: 0 0 22px rgba(255, 215, 94, .25)
-		}
-
-		.cta-row {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			gap: 1rem;
-			margin-top: 1.5rem;
-			flex-wrap: wrap
-		}
-
-		.btn {
-			appearance: none;
-			border: none;
-			border-radius: 999px;
-			padding: .85rem 1.2rem;
-			background: #ffffff;
-			color: #0b0b0c;
-			font-weight: 700;
-			font-size: 1rem;
-			box-shadow: 0 10px 24px rgba(0, 0, 0, .35);
-			cursor: pointer;
-			text-decoration: none;
-			display: inline-block
-		}
-
-		.btn:hover {
-			transform: translateY(-1px);
-			box-shadow: 0 16px 32px rgba(0, 0, 0, .45)
-		}
-
-		.link {
-			color: #eef2f9;
-			text-decoration: none;
-			font-weight: 700;
-			font-size: 1rem;
-			opacity: .95
-		}
-
-		.link:hover {
-			opacity: 1;
-			text-decoration: underline;
-			text-underline-offset: 4px
-		}
-
-		/* Quotes */
-		.quote-wrap {
-			text-align: left;
-			margin-inline: auto;
-			width: min(1100px, 92vw)
-		}
-
-		.quote-lines {
-			margin: 0;
-			padding: 0;
-			list-style: none
-		}
-
-		.quote-line {
-			margin: .12rem 0;
-			padding: 0;
-			font-size: clamp(1.4rem, 1.1rem + 2.8vw, 3rem);
-			font-weight: 800;
-			letter-spacing: -.01em;
-			line-height: 1.18;
-			opacity: 0;
-			transform: translateY(60px);
-			text-shadow: 0 2px 28px rgba(0, 0, 0, .45);
-		}
-
-		.author {
-			margin: .95rem 0 0;
-			color: #e6e9f3;
-			font-weight: 600;
-			font-size: clamp(1rem, .9rem + .45vw, 1.1rem);
-			transform: translateY(40px);
-			opacity: 0
-		}
-
-		.intro-title,
-		.intro-cta {
-			opacity: 0;
-			transform: translateY(40px)
-		}
-
-		/* Modal */
-		.modal-backdrop {
-			position: fixed;
-			inset: 0;
-			z-index: 100;
-			background: rgba(0, 0, 0, .7);
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			padding: 1rem;
-			opacity: 0;
-			pointer-events: none;
-			transition: opacity .3s var(--ease);
-			-webkit-backdrop-filter: blur(8px);
-			backdrop-filter: blur(8px);
-		}
-
-		.modal-backdrop[aria-hidden="false"] {
-			opacity: 1;
-			pointer-events: auto;
-		}
-
-		.modal-card {
-			background: #1c1c1e;
-			border-radius: 1rem;
-			padding: 2rem 2.5rem;
-			width: min(480px, 100%);
-			border: 1px solid rgba(255, 255, 255, .1);
-			box-shadow: 0 20px 50px rgba(0, 0, 0, .5);
-			text-align: center;
-			position: relative;
-			transform: scale(.95);
-			transition: transform .3s var(--ease);
-		}
-
-		.modal-backdrop[aria-hidden="false"] .modal-card {
-			transform: scale(1);
-		}
-
-		.modal-title {
-			font-size: 1.5rem;
-			font-weight: 700;
-			margin: 0 0 .5rem;
-			color: var(--text);
-		}
-
-		.modal-sub {
-			margin: 0;
-			color: var(--muted);
-			line-height: 1.5;
-		}
-
-		.modal-close {
-			position: absolute;
-			top: .75rem;
-			right: .75rem;
-			width: 32px;
-			height: 32px;
-			border-radius: 50%;
-			border: none;
-			background: rgba(255, 255, 255, .1);
-			color: var(--muted);
-			font-size: 1.2rem;
-			line-height: 1;
-			cursor: pointer;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			transition: background .2s, color .2s;
-		}
-
-		.modal-close:hover {
-			background: rgba(255, 255, 255, .2);
-			color: var(--text);
-		}
-
-		/* Initial black overlay */
-		.black-overlay {
-			position: fixed;
-			inset: 0;
-			background: #000;
-			z-index: 30;
-			pointer-events: none
-		}
-
-		/* No-JS fallback */
-		.no-js .bg-img {
-			opacity: 1 !important
-		}
-
-		.no-js .intro-title,
-		.no-js .intro-cta,
-		.no-js .crest,
-		.no-js .quote-line,
-		.no-js .author,
-		.no-js .cta-row {
-			opacity: 1 !important;
-			transform: none !important
-		}
-
-		@media (prefers-reduced-motion: reduce) {
-
-			.bg-img,
-			.quote-line,
-			.author,
-			.crest,
-			.intro-title,
-			.intro-cta,
-			.cta-row {
-				transition: none !important;
-				animation: none !important
-			}
-		}
-
-		/* Anchor offset for fixed header */
-		:target::before {
-			content: "";
-			display: block;
-			height: 80px;
-			margin-top: -80px;
-		}
-	</style>
+    /* Anchor offset for fixed header */
+    :target::before { content: ""; display: block; height: 60px; margin-top: -60px; }
+    @media (max-width:640px) { :target::before { height: 56px; margin-top: -56px; } }
+  </style>
 </head>
-
 <body class="no-js">
-	<a class="skip-link" href="#main">Skip to content</a>
+  <a class="skip-link" data-bypass="true" href="#main">Skip to content</a>
 
-	<!-- Backgrounds -->
-	<div class="bg-stack" aria-hidden="true">
-		<img class="bg-img is-initial" src="bg0.webp" alt="" />
-		<img class="bg-img" src="bg1.webp" alt="" />
-		<img class="bg-img" src="bg2.webp" alt="" />
-		<img class="bg-img" src="bg3.webp" alt="" />
-		<img class="bg-img" src="bg4.webp" alt="" />
-		<img class="bg-img" src="bg5.webp" alt="" />
-		<img class="bg-img" src="bg6.webp" alt="" />
-		<img class="bg-img" src="bg7.webp" alt="" />
-		<div class="bg-overlay"></div>
-		<div class="grain"></div>
-	</div>
+  <!-- Backgrounds -->
+  <div class="bg-stack" aria-hidden="true">
+    <img class="bg-img is-initial" src="bg0.webp" alt="" role="presentation" />
+    <img class="bg-img" src="bg1.webp" alt="" role="presentation" />
+    <img class="bg-img" src="bg2.webp" alt="" role="presentation" />
+    <img class="bg-img" src="bg3.webp" alt="" role="presentation" />
+    <img class="bg-img" src="bg4.webp" alt="" role="presentation" />
+    <img class="bg-img" src="bg5.webp" alt="" role="presentation" />
+    <img class="bg-img" src="bg6.webp" alt="" role="presentation" />
+    <img class="bg-img" src="bg7.webp" alt="" role="presentation" />
+    <img class="bg-img" src="bg8.webp" alt="" role="presentation" />
+    <div class="bg-overlay"></div>
+    <div class="grain"></div>
+  </div>
 
-	<!-- Apple-like navigation bar -->
-	<header class="apple-header" role="banner" aria-label="Primary">
-		<div class="inner">
-			<div class="brand-left">Careers at <span class="accent">MANCHESTER SAFE HOUSE</span></div>
-			<nav class="nav-right" aria-label="Global">
-				<a href="#intro">Overview</a>
-				<a href="#quote1">Work with us</a>
-				<a href="#quote2">Life with us</a>
-				<a href="#quote3">Training</a>
-				<a href="#quote4">Community</a>
-				<a href="#quote5">Growth</a>
-				<a href="#quote6">Mentorship</a>
-				<a href="#quote7">Leadership</a>
-				<a href="#quote8">Legacy</a>
-				<button class="search-pill" type="button" data-modal-trigger>Search Roles</button>
-			</nav>
-		</div>
-	</header>
+  <!-- Apple-like navigation bar -->
+  <header class="apple-header" role="banner" aria-label="Primary">
+    <div class="inner">
+      <div class="brand-left">Careers at <span class="accent">MANCHESTER SAFE HOUSE</span></div>
+      <nav class="nav-right" aria-label="Global">
+        <a href="#intro">Overview</a>
+        <a href="#quote1">Work with us</a>
+        <a href="#quote2">Life with us</a>
+        <a href="#quote3">Training</a>
+        <a href="#quote4">Community</a>
+        <a href="#quote5">Growth</a>
+        <a href="#quote6">Mentorship</a>
+        <a href="#quote7">Leadership</a>
+        <a href="#quote8">Legacy</a>
+        <button class="search-pill" type="button">Search Roles</button>
+      </nav>
+    </div>
+  </header>
 
-	<div class="progress-wrap" aria-hidden="true">
-		<div class="progress" id="progressBar"></div>
-	</div>
-	<div class="black-overlay" id="blackOverlay" aria-hidden="true"></div>
+  <div class="progress-wrap" aria-hidden="true">
+    <div class="progress" id="progressBar"></div>
+  </div>
+  <div class="black-overlay" id="blackOverlay" aria-hidden="true"></div>
 
-	<main id="main" tabindex="-1" aria-label="Manchester Safe House intro and quotes">
-		<!-- Section 1 -->
-		<section class="section" id="section1" aria-label="Intro">
-			<div class="content">
-				<img id="crestImg" class="crest" src="crest.webp" alt="Manchester Safe House crest logo" />
-				<h1>Join us. <span class="gold">Be you.</span></h1>
-				<div class="cta-row">
-					<button class="btn btn-primary" data-open-modal="#filmModal">
-						<i class="fa-solid fa-play"></i><span>Watch the film</span>
-					</button>
-				</div>
-			</div>
-		</section>
+  <main id="main" tabindex="-1" aria-label="Manchester Safe House intro and quotes">
+    <!-- Intro -->
+    <section id="intro">
+      <div class="content">
+        <!-- Inline crest (SVG) -->
+        <svg class="crest" viewBox="0 0 200 200" role="img" aria-label="Manchester Safe House crest">
+          <defs>
+            <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0" stop-color="#ffd75e" />
+              <stop offset="1" stop-color="#fff3b0" />
+            </linearGradient>
+            <filter id="inner" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="rgba(0,0,0,.45)" />
+            </filter>
+          </defs>
+          <circle cx="100" cy="100" r="92" fill="url(#g)" opacity="0.18" />
+          <path d="M100 22 L160 50 L160 102 C160 140 132 170 100 178 C68 170 40 140 40 102 L40 50 Z" fill="url(#g)" filter="url(#inner)" />
+          <path d="M100 48 L140 66 L140 100 C140 128 122 150 100 156 C78 150 60 128 60 100 L60 66 Z" fill="#0b0b0c" opacity="0.85" />
+          <path d="M88 105 h24 v34 h-24 z" fill="url(#g)" opacity="0.8" />
+          <circle cx="100" cy="88" r="10" fill="url(#g)" />
+        </svg>
 
-		<!-- Quote Sections -->
-		<section id="quote1" aria-label="Quote 1">
-			<div class="quote-wrap">
-				<ul class="quote-lines">
-					<li class="quote-line">This is where those people gather</li>
-					<li class="quote-line">who drove at 2 AM,</li>
-					<li class="quote-line">knocked in the rain,</li>
-					<li class="quote-line">heard “no” more times than you can count,</li>
-					<li class="quote-line">And what set us apart wasn’t a résumé,</li>
-					<li class="quote-line">it was that insatiable hunger to succeed</li>
-					<li class="quote-line">as badly as you wanted to breathe.</li>
-				</ul>
-				<p class="author">Derek 05, Sales Representative & Alarm Technician</p>
-				<div class="cta-row"><a href="#" class="btn">Watch the film</a><a href="#" class="link">Learn about hardware</a></div>
-			</div>
-		</section>
-		<section id="quote2" aria-label="Quote 2">
-			<div class="quote-wrap">
-				<ul class="quote-lines">
-					<li class="quote-line">My determination turned into opportunity.</li>
-					<li class="quote-line">What once just covered rent,</li>
-					<li class="quote-line">now built a house for my children,</li>
-					<li class="quote-line">and another one down the street for my mom.</li>
-				</ul>
-				<p class="author">Pedro 04, Sales Representative & Alarm Technician</p>
-				<div class="cta-row"><a href="#" class="btn">Watch the film</a><a href="#" class="link">Learn about hardware</a></div>
-			</div>
-		</section>
-		<section id="quote3" aria-label="Quote 3">
-			<div class="quote-wrap">
-				<ul class="quote-lines">
-					<li class="quote-line">Finally, work has given me more than a paycheck--</li>
-					<li class="quote-line">It gave me purpose.</li>
-					<li class="quote-line">I protect families.</li>
-					<li class="quote-line">I serve my community.</li>
-				</ul>
-				<p class="author">Albin 03, Sales Representative & Alarm Technician</p>
-				<div class="cta-row"><a href="#" class="btn">Watch the film</a><a href="#" class="link">Learn about hardware</a></div>
-			</div>
-		</section>
-		<section id="quote4" aria-label="Quote 4">
-			<div class="quote-wrap">
-				<ul class="quote-lines">
-					<li class="quote-line">I’m writing a life that I had been convinced was over.</li>
-					<li class="quote-line">The work I’m doing now isn’t being erased.</li>
-					<li class="quote-line">The work I’ve done is still rewarding with a residual paycheck.</li>
-				</ul>
-				<p class="author">Tadju 01, Sales Representative & Alarm Technician</p>
-				<div class="cta-row"><a href="#" class="btn">Watch the film</a><a href="#" class="link">Learn about hardware</a></div>
-			</div>
-		</section>
-		<section id="quote5" aria-label="Quote 5">
-			<div class="quote-wrap">
-				<ul class="quote-lines">
-					<li class="quote-line">Every door we knock is an opportunity,</li>
-					<li class="quote-line">every “no” a step closer to “yes”.</li>
-					<li class="quote-line">We learn fast,</li>
-					<li class="quote-line">we own our results,</li>
-					<li class="quote-line">we get better together.</li>
-				</ul>
-				<p class="author">Maya 07, Sales Representative & Alarm Technician</p>
-				<div class="cta-row"><a href="#" class="btn">Watch the film</a><a href="#" class="link">Learn about hardware</a></div>
-			</div>
-		</section>
-		<section id="quote6" aria-label="Quote 6">
-			<div class="quote-wrap">
-				<ul class="quote-lines">
-					<li class="quote-line">I found mentors who invested in me.</li>
-					<li class="quote-line">They taught me the craft,</li>
-					<li class="quote-line">and the character behind it.</li>
-					<li class="quote-line">Now I invest in the next person.</li>
-				</ul>
-				<p class="author">Omar 06, Sales Representative & Alarm Technician</p>
-				<div class="cta-row"><a href="#" class="btn">Watch the film</a><a href="#" class="link">Learn about hardware</a></div>
-			</div>
-		</section>
-		<section id="quote7" aria-label="Quote 7">
-			<div class="quote-wrap">
-				<ul class="quote-lines">
-					<li class="quote-line">Leadership here isn’t a title.</li>
-					<li class="quote-line">It’s service.</li>
-					<li class="quote-line">It’s showing up,</li>
-					<li class="quote-line">especially when it’s hard.</li>
-				</ul>
-				<p class="author">Sofia 02, Sales Representative & Alarm Technician</p>
-				<div class="cta-row"><a href="#" class="btn">Watch the film</a><a href="#" class="link">Learn about hardware</a></div>
-			</div>
-		</section>
-		<section id="quote8" aria-label="Quote 8">
-			<div class="quote-wrap">
-				<ul class="quote-lines">
-					<li class="quote-line">What we build protects families.</li>
-					<li class="quote-line">It outlasts a single day.</li>
-					<li class="quote-line">It’s a legacy I’m proud of.</li>
-				</ul>
-				<p class="author">Elena 08, Sales Representative & Alarm Technician</p>
-				<div class="cta-row"><a href="#" class="btn">Watch the film</a><a href="#" class="link">Learn about hardware</a></div>
-			</div>
-		</section>
-	</main>
+        <h1 class="intro-title">Join us. <span class="gold">Be you.</span></h1>
+        <div class="cta-row intro-cta">
+          <a href="#" class="btn">Watch the film</a>
+          <a href="#" class="link">Learn about hardware</a>
+        </div>
+      </div>
+    </section>
 
-	<!-- Modal -->
-	<div class="modal-backdrop" id="accessModal" aria-hidden="true" role="dialog" aria-labelledby="modalTitle" aria-describedby="modalDesc">
-		<div class="modal-card" role="document">
-			<button class="modal-close" type="button" aria-label="Close dialog">×</button>
-			<h2 id="modalTitle" class="modal-title">Access code required</h2>
-			<p id="modalDesc" class="modal-sub">Joining MANCHESTER SAFE HOUSE is by invite only. Access code required.</p>
-		</div>
-	</div>
+    <!-- Quote 1 -->
+    <section id="quote1" aria-label="Quote 1">
+      <div class="quote-wrap">
+        <ul class="quote-lines">
+          <li class="quote-line">This is where those people gather</li>
+          <li class="quote-line">who drove at 2 AM,</li>
+          <li class="quote-line">knocked in the rain,</li>
+          <li class="quote-line">heard “no” more times than you can count,</li>
+          <li class="quote-line">And what set us apart wasn’t a résumé,</li>
+          <li class="quote-line">it was that insatiable hunger to succeed</li>
+          <li class="quote-line">as badly as you wanted to breathe.</li>
+        </ul>
+        <p class="author">Derek 05, Sales Representative & Alarm Technician</p>
+        <div class="cta-row">
+          <a href="#" class="btn">Watch the film</a>
+          <a href="#" class="link">Learn about hardware</a>
+        </div>
+      </div>
+    </section>
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" crossorigin="anonymous"></script>
-	<script>
-		(function() {
-			// JS ready
-			document.body.classList.remove('no-js');
+    <!-- Quote 2 -->
+    <section id="quote2" aria-label="Quote 2">
+      <div class="quote-wrap">
+        <ul class="quote-lines">
+          <li class="quote-line">My determination turned into opportunity.</li>
+          <li class="quote-line">What once just covered rent,</li>
+          <li class="quote-line">now built a house for my children,</li>
+          <li class="quote-line">and another one down the street for my mom.</li>
+        </ul>
+        <p class="author">Pedro 04, Sales Representative & Alarm Technician</p>
+        <div class="cta-row">
+          <a href="#" class="btn">Watch the film</a>
+          <a href="#" class="link">Learn about hardware</a>
+        </div>
+      </div>
+    </section>
 
-			// Modal handling
-			const accessModal = document.getElementById('accessModal');
-			const modalCloseBtn = accessModal.querySelector('.modal-close');
-			const main = document.querySelector('main');
-			let lastFocusedElement;
+    <!-- Quote 3 -->
+    <section id="quote3" aria-label="Quote 3">
+      <div class="quote-wrap">
+        <ul class="quote-lines">
+          <li class="quote-line">Finally, work has given me more than a paycheck--</li>
+          <li class="quote-line">It gave me purpose.</li>
+          <li class="quote-line">I protect families.</li>
+          <li class="quote-line">I serve my community.</li>
+        </ul>
+        <p class="author">Albin 03, Sales Representative & Alarm Technician</p>
+        <div class="cta-row">
+          <a href="#" class="btn">Watch the film</a>
+          <a href="#" class="link">Learn about hardware</a>
+        </div>
+      </div>
+    </section>
 
-			function openModal() {
-				lastFocusedElement = document.activeElement;
-				accessModal.setAttribute('aria-hidden', 'false');
-				document.body.style.overflow = 'hidden';
-				if (main) main.setAttribute('aria-hidden', 'true');
-				modalCloseBtn.focus();
-				document.addEventListener('keydown', handleEsc);
-			}
+    <!-- Quote 4 -->
+    <section id="quote4" aria-label="Quote 4">
+      <div class="quote-wrap">
+        <ul class="quote-lines">
+          <li class="quote-line">I’m writing a life that I had been convinced was over.</li>
+          <li class="quote-line">The work I’m doing now isn’t being erased.</li>
+          <li class="quote-line">The work I’ve done is still rewarding with a residual paycheck.</li>
+        </ul>
+        <p class="author">Tadju 01, Sales Representative & Alarm Technician</p>
+        <div class="cta-row">
+          <a href="#" class="btn">Watch the film</a>
+          <a href="#" class="link">Learn about hardware</a>
+        </div>
+      </div>
+    </section>
 
-			function closeModal() {
-				accessModal.setAttribute('aria-hidden', 'true');
-				document.body.style.overflow = '';
-				if (main) main.removeAttribute('aria-hidden');
-				document.removeEventListener('keydown', handleEsc);
-				if (lastFocusedElement) lastFocusedElement.focus();
-			}
+    <!-- Quote 5 -->
+    <section id="quote5" aria-label="Quote 5">
+      <div class="quote-wrap">
+        <ul class="quote-lines">
+          <li class="quote-line">Every door we knock is an opportunity,</li>
+          <li class="quote-line">every “no” a step closer to “yes”.</li>
+          <li class="quote-line">We learn fast,</li>
+          <li class="quote-line">we own our results,</li>
+          <li class="quote-line">we get better together.</li>
+        </ul>
+        <p class="author">Maya 07, Sales Representative & Alarm Technician</p>
+        <div class="cta-row">
+          <a href="#" class="btn">Watch the film</a>
+          <a href="#" class="link">Learn about hardware</a>
+        </div>
+      </div>
+    </section>
 
-			function handleEsc(e) {
-				if (e.key === 'Escape') closeModal();
-			}
+    <!-- Quote 6 -->
+    <section id="quote6" aria-label="Quote 6">
+      <div class="quote-wrap">
+        <ul class="quote-lines">
+          <li class="quote-line">I found mentors who invested in me.</li>
+          <li class="quote-line">They taught me the craft,</li>
+          <li class="quote-line">and the character behind it.</li>
+          <li class="quote-line">Now I invest in the next person.</li>
+        </ul>
+        <p class="author">Omar 06, Sales Representative & Alarm Technician</p>
+        <div class="cta-row">
+          <a href="#" class="btn">Watch the film</a>
+          <a href="#" class="link">Learn about hardware</a>
+        </div>
+      </div>
+    </section>
 
-			modalCloseBtn.addEventListener('click', closeModal);
-			accessModal.addEventListener('click', (e) => { if (e.target === accessModal) closeModal(); });
+    <!-- Quote 7 -->
+    <section id="quote7" aria-label="Quote 7">
+      <div class="quote-wrap">
+        <ul class="quote-lines">
+          <li class="quote-line">Leadership here isn’t a title.</li>
+          <li class="quote-line">It’s service.</li>
+          <li class="quote-line">It’s showing up,</li>
+          <li class="quote-line">especially when it’s hard.</li>
+        </ul>
+        <p class="author">Sofia 02, Sales Representative & Alarm Technician</p>
+        <div class="cta-row">
+          <a href="#" class="btn">Watch the film</a>
+          <a href="#" class="link">Learn about hardware</a>
+        </div>
+      </div>
+    </section>
 
-			// Intercept clicks on modal triggers only
-			document.addEventListener('click', (e) => {
-				if (e.target.closest('[data-modal-trigger]')) {
-					e.preventDefault();
-					openModal();
-				}
-			});
+    <!-- Quote 8 -->
+    <section id="quote8" aria-label="Quote 8">
+      <div class="quote-wrap">
+        <ul class="quote-lines">
+          <li class="quote-line">What we build protects families.</li>
+          <li class="quote-line">It outlasts a single day.</li>
+          <li class="quote-line">It’s a legacy I’m proud of.</li>
+        </ul>
+        <p class="author">Elena 08, Sales Representative & Alarm Technician</p>
+        <div class="cta-row">
+          <a href="#" class="btn">Watch the film</a>
+          <a href="#" class="link">Learn about hardware</a>
+        </div>
+      </div>
+    </section>
+  </main>
 
-			// Progress bar
-			const progressBar = document.getElementById('progressBar');
+  <!-- Modal -->
+  <div class="modal-backdrop" id="accessModal" aria-hidden="true" role="dialog" aria-labelledby="modalTitle" aria-describedby="modalDesc">
+    <div class="modal-card" role="document">
+      <button class="modal-close" type="button" aria-label="Close dialog">×</button>
+      <h2 id="modalTitle" class="modal-title">Access code required</h2>
+      <p id="modalDesc" class="modal-sub">Joining MANCHESTER SAFE HOUSE is by invite only. Access code required.</p>
+    </div>
+  </div>
 
-			function updateProgress() {
-				const y = window.scrollY || document.documentElement.scrollTop;
-				const docH = document.documentElement.scrollHeight - window.innerHeight;
-				const pct = docH > 0 ? (y / docH) * 100 : 0;
-				if (progressBar) progressBar.style.width = pct + '%';
-			}
-			document.addEventListener('scroll', updateProgress, { passive: true });
-			updateProgress();
+  <noscript>
+    <style>
+      .bg-img { opacity:1 !important }
+      .intro-title, .intro-cta, .crest, .quote-line, .author { opacity:1 !important; transform:none !important }
+    </style>
+  </noscript>
 
-			const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-			const hasGSAP = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
-			const black = document.getElementById('blackOverlay');
-			const crest = document.querySelector('.crest');
-			const introTitle = document.querySelector('.intro-title');
-			const introCta = document.querySelector('.intro-cta');
-			const bgs = Array.from(document.querySelectorAll('.bg-img'));
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" crossorigin="anonymous"></script>
+  <script>
+    (function() {
+      // JS ready
+      document.body.classList.remove('no-js');
 
-			// Intro fade from black and crest entrance
-			if (!prefersReduced && hasGSAP) {
-				gsap.set([introTitle, introCta], { opacity: 0, y: 40 });
-				gsap.set(crest, { opacity: 0, scale: 0.9 });
-				gsap.timeline()
-					.to(black, { opacity: 0, duration: 0.9, ease: 'power2.out', onComplete() { black.style.display = 'none'; } }, 0)
-					.to(crest, { opacity: 1, scale: 1, duration: 0.85, ease: 'power3.out' }, 0.1)
-					.to(introTitle, { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' }, 0.35)
-					.to(introCta, { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' }, 0.45);
-			} else {
-				black.style.display = 'none';
-				document.querySelectorAll('.crest, .intro-title, .intro-cta, .quote-line, .author, .cta-row').forEach(el => {
-					el.style.opacity = 1;
-					el.style.transform = 'none';
-				});
-			}
+      // Modal handling (intercept clicks)
+      const accessModal = document.getElementById('accessModal');
+      const modalCloseBtn = accessModal.querySelector('.modal-close');
+      const main = document.querySelector('main');
+      function openModal() {
+        accessModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        if (main) main.setAttribute('aria-hidden', 'true');
+        modalCloseBtn.focus();
+        accessModal._esc = (e) => { if (e.key === 'Escape') closeModal(); };
+        document.addEventListener('keydown', accessModal._esc);
+      }
+      function closeModal() {
+        accessModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        if (main) main.removeAttribute('aria-hidden');
+        document.removeEventListener('keydown', accessModal._esc || (() => {}));
+      }
+      modalCloseBtn.addEventListener('click', closeModal);
+      accessModal.addEventListener('click', (e) => { if (e.target === accessModal) closeModal(); });
 
-			if (!hasGSAP || prefersReduced) return;
-			gsap.registerPlugin(ScrollTrigger);
+      // Intercept all a/button clicks except the modal close and skip-link
+      document.addEventListener('click', (e) => {
+        const t = e.target.closest('a, button');
+        if (!t) return;
+        if (t.hasAttribute('data-bypass') || t === modalCloseBtn) return;
+        e.preventDefault();
+        openModal();
+      });
 
-			function fadeToBG(showIdx, opts = {}) {
-				bgs.forEach((img, i) => {
-					gsap.to(img, {
-						opacity: i === showIdx ? 1 : 0,
-						duration: opts.duration || 0.8,
-						ease: opts.ease || 'power2.out',
-						overwrite: 'auto'
-					});
-				});
-			}
+      // Progress bar
+      const progressBar = document.getElementById('progressBar');
+      function updateProgress() {
+        const y = window.scrollY || document.documentElement.scrollTop;
+        const docH = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = docH > 0 ? (y / docH) * 100 : 0;
+        if (progressBar) progressBar.style.width = pct + '%';
+      }
+      document.addEventListener('scroll', updateProgress, { passive: true });
+      updateProgress();
 
-			// Intro scroll
-			const introST = ScrollTrigger.create({
-				trigger: '#intro',
-				start: 'top top',
-				end: '+=120%',
-				scrub: 0.6,
-				pin: true,
-				onEnter: () => fadeToBG(0, { duration: .6 }),
-				onEnterBack: () => fadeToBG(0, { duration: .6 })
-			});
-			gsap.timeline({ scrollTrigger: introST })
-				.to('.crest', { scale: 1.7, opacity: , ease: 'none' }, 0)
-				.to(bgs[0], { yPercent: -12, opacity: 0.25, ease: 'none' }, 0)
-				.fromTo(bgs[1], { scale: 1.35, opacity: 0 }, { scale: 1, opacity: 1, ease: 'none' }, 0);
+      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const hasGSAP = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
+      const black = document.getElementById('blackOverlay');
+      const crest = document.querySelector('.crest');
+      const introTitle = document.querySelector('.intro-title');
+      const introCta = document.querySelector('.intro-cta');
+      const bgs = Array.from(document.querySelectorAll('.bg-img'));
 
-			// Helper to create quote timelines
-			function makeQuoteTL({ id, bgIndex, prevIndex, drift = { scale: 1.04, y: -6 }, rotateOut = false }) {
-				const sec = document.querySelector(id);
-				if (!sec) return;
-				const lines = sec.querySelectorAll('.quote-line');
-				const author = sec.querySelector('.author');
-				const cta = sec.querySelector('.cta-row');
+      // Intro fade from black and crest entrance
+      if (!prefersReduced && hasGSAP) {
+        gsap.set([introTitle, introCta], { opacity: 0, y: 40 });
+        gsap.set(crest, { opacity: 0, scale: 0.9 });
+        gsap.timeline()
+          .to(black, { opacity: 0, duration: 0.9, ease: 'power2.out', onComplete() { black.style.display = 'none'; } }, 0)
+          .to(crest, { opacity: 1, scale: 1, duration: 0.85, ease: 'power3.out' }, 0.1)
+          .to(introTitle, { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' }, 0.35)
+          .to(introCta, { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' }, 0.45);
+      } else {
+        black.style.display = 'none';
+        crest.style.opacity = 1; crest.style.transform = 'none';
+        introTitle.style.opacity = 1; introTitle.style.transform = 'none';
+        introCta.style.opacity = 1; introCta.style.transform = 'none';
+      }
 
-				if (cta) gsap.set(cta, { opacity: 0, y: 30 });
+      if (!hasGSAP || prefersReduced) return;
+      gsap.registerPlugin(ScrollTrigger);
 
-				const tl = gsap.timeline({
-					scrollTrigger: {
-						trigger: id,
-						start: 'top top',
-						end: '+=140%',
-						scrub: 0.6,
-						pin: true,
-						onEnter: () => fadeToBG(bgIndex, { duration: .6 }),
-						onEnterBack: () => fadeToBG(bgIndex, { duration: .6 })
-					}
-				});
+      function fadeToBG(showIdx, opts = {}) {
+        bgs.forEach((img, i) => {
+          gsap.to(img, {
+            opacity: i === showIdx ? 1 : 0,
+            duration: opts.duration || 0.8,
+            ease: opts.ease || 'power2.out',
+            overwrite: 'auto'
+          });
+        });
+      }
 
-				if (typeof prevIndex === 'number') {
-					tl.to(bgs[prevIndex], { opacity: 0, rotation: rotateOut ? 8 : 0, duration: 0.5, ease: 'power2.out' }, 0);
-				}
-				tl.fromTo(bgs[bgIndex], { opacity: 0, scale: drift.scale + 0.14 }, { opacity: 1, scale: drift.scale, duration: 0.8, ease: 'power2.out' }, 0)
-					.to(bgs[bgIndex], { scale: 1, yPercent: drift.y, ease: 'none' }, 0.25);
+      // Intro scroll: crest zooms/fades, bg0 drifts up, bg1 zooms out and fades in
+      const introST = ScrollTrigger.create({
+        trigger: '#intro',
+        start: 'top top',
+        end: '+=120%',
+        scrub: 0.6,
+        pin: true,
+        onEnter: () => fadeToBG(0, { duration: .6 }),
+        onEnterBack: () => fadeToBG(0, { duration: .6 })
+      });
+      gsap.timeline({ scrollTrigger: introST })
+        .to('.crest', { scale: 1.7, opacity: 0, ease: 'none' }, 0)
+        .to(bgs[0], { yPercent: -12, opacity: 0.25, ease: 'none' }, 0)
+        .fromTo(bgs[1], { scale: 1.35, opacity: 0 }, { scale: 1, opacity: 1, ease: 'none' }, 0);
 
-				const staggerTime = 0.22;
-				lines.forEach((line, i) => tl.to(line, { opacity: 1, y: 0, duration: 0.22, ease: 'power2.out' }, i * staggerTime + 0.08));
-				const authorDelay = lines.length * staggerTime + 0.12;
-				tl.to(author, { opacity: 1, y: 0, duration: 0.25, ease: 'power2.out' }, authorDelay);
-				if (cta) {
-					tl.to(cta, { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }, authorDelay + 0.1);
-				}
-			}
+      // Helper to create quote timelines
+      function makeQuoteTL({ id, bgIndex, prevIndex, drift = { scale: 1.04, y: -6 }, rotateOut = false }) {
+        const sec = document.querySelector(id);
+        if (!sec) return;
+        const lines = sec.querySelectorAll('.quote-line');
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: id,
+            start: 'top top',
+            end: '+=140%',
+            scrub: 0.6,
+            pin: true,
+            onEnter: () => fadeToBG(bgIndex, { duration: .6 }),
+            onEnterBack: () => fadeToBG(bgIndex, { duration: .6 })
+          }
+        });
 
-			// Quote 1..8 timelines
-			makeQuoteTL({ id: '#quote1', bgIndex: 1, prevIndex: 0, drift: { scale: 1.05, y: -6 } });
-			makeQuoteTL({ id: '#quote2', bgIndex: 2, prevIndex: 1, drift: { scale: 1.04, y: -8 } });
-			makeQuoteTL({ id: '#quote3', bgIndex: 3, prevIndex: 2, rotateOut: true, drift: { scale: 1.00, y: -4 } });
-			makeQuoteTL({ id: '#quote4', bgIndex: 4, prevIndex: 3, drift: { scale: 1.04, y: -6 } });
-			makeQuoteTL({ id: '#quote5', bgIndex: 5, prevIndex: 4, drift: { scale: 1.05, y: -6 } });
-			makeQuoteTL({ id: '#quote6', bgIndex: 6, prevIndex: 5, drift: { scale: 1.03, y: -5 } });
-			makeQuoteTL({ id: '#quote7', bgIndex: 7, prevIndex: 6, rotateOut: true, drift: { scale: 1.00, y: -3 } });
-			makeQuoteTL({ id: '#quote8', bgIndex: 8, prevIndex: 7, drift: { scale: 1.02, y: -4 } });
+        if (typeof prevIndex === 'number') {
+          if (rotateOut) {
+            tl.to(bgs[prevIndex], { rotation: 8, opacity: 0, duration: 0.6, ease: 'power2.out' }, 0);
+          } else {
+            tl.to(bgs[prevIndex], { opacity: 0, duration: 0.5, ease: 'power2.out' }, 0);
+          }
+        }
+        tl.fromTo(bgs[bgIndex], { opacity: 0, scale: drift.scale + 0.14 }, { opacity: 1, scale: drift.scale, duration: 0.8, ease: 'power2.out' }, 0)
+          .to(bgs[bgIndex], { scale: 1, yPercent: drift.y, ease: 'none' }, 0.25);
 
-			// Scrollspy for header nav
-			const navLinks = Array.from(document.querySelectorAll('.nav-right a'));
-			const sections = ['intro', 'quote1', 'quote2', 'quote3', 'quote4', 'quote5', 'quote6', 'quote7', 'quote8'];
-			const observer = new IntersectionObserver((entries) => {
-				entries.forEach(entry => {
-					if (entry.isIntersecting) {
-						navLinks.forEach(a => a.removeAttribute('aria-current'));
-						const activeLink = navLinks.find(a => a.getAttribute('href') === `#${entry.target.id}`);
-						if (activeLink) activeLink.setAttribute('aria-current', 'true');
-					}
-				});
-			}, { rootMargin: '-40% 0px -55% 0px', threshold: 0.01 });
-			sections.forEach(id => {
-				const sec = document.getElementById(id);
-				if (sec) observer.observe(sec);
-			});
-		})();
-	</script>
+        lines.forEach((line, i) => tl.to(line, { opacity: 1, y: 0, duration: 0.22, ease: 'power2.out' }, i * 0.22 + 0.08));
+        tl.to(sec.querySelector('.author'), { opacity: 1, y: 0, duration: 0.25, ease: 'power2.out' }, lines.length * 0.22 + 0.12);
+      }
+
+      // Quote 1..8 timelines
+      makeQuoteTL({ id: '#quote1', bgIndex: 1, prevIndex: 0, drift: { scale: 1.05, y: -6 } });
+      makeQuoteTL({ id: '#quote2', bgIndex: 2, prevIndex: 1, drift: { scale: 1.04, y: -8 } });
+      makeQuoteTL({ id: '#quote3', bgIndex: 3, prevIndex: 2, rotateOut: true, drift: { scale: 1.00, y: -4 } });
+      makeQuoteTL({ id: '#quote4', bgIndex: 4, prevIndex: 3, drift: { scale: 1.04, y: -6 } });
+      makeQuoteTL({ id: '#quote5', bgIndex: 5, prevIndex: 4, drift: { scale: 1.05, y: -6 } });
+      makeQuoteTL({ id: '#quote6', bgIndex: 6, prevIndex: 5, drift: { scale: 1.03, y: -5 } });
+      makeQuoteTL({ id: '#quote7', bgIndex: 7, prevIndex: 6, rotateOut: true, drift: { scale: 1.00, y: -3 } });
+      makeQuoteTL({ id: '#quote8', bgIndex: 8, prevIndex: 7, drift: { scale: 1.02, y: -4 } });
+
+      // Scrollspy for header nav (visual only; clicks still open modal)
+      const navLinks = Array.from(document.querySelectorAll('.nav-right a'));
+      const spy = new IntersectionObserver((entries) => {
+        entries.forEach(en => {
+          if (en.isIntersecting) {
+            navLinks.forEach(a => a.removeAttribute('aria-current'));
+            const active = navLinks.find(a => a.getAttribute('href') === `#${en.target.id}`);
+            if (active) active.setAttribute('aria-current', 'true');
+          }
+        });
+      }, { rootMargin: '-40% 0px -55% 0px', threshold: 0.01 });
+      ['intro','quote1','quote2','quote3','quote4','quote5','quote6','quote7','quote8'].forEach(id => {
+        const sec = document.getElementById(id);
+        if (sec) spy.observe(sec);
+      });
+    })();
+  </script>
 </body>
-
 </html>
