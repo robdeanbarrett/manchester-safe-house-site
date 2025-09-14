@@ -1,189 +1,772 @@
 <!DOCTYPE html>
-<html lang="en" class="no-js">
+<html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Careers at Manchester Safe House</title>
-  <meta name="description" content="Join Manchester Safe House. Purposeful work protecting families and serving our community. Careers, culture, and opportunities." />
-  <meta property="og:title" content="Careers at Manchester Safe House" />
-  <meta property="og:description" content="Join Manchester Safe House. Purposeful work protecting families and serving our community." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="/" />
-  <meta name="twitter:card" content="summary_large_image" />
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<title>Manchester Safe House — Join us. Be you.</title>
+	<meta name="description" content="Join Manchester Safe House. Purposeful work protecting families and serving our community."/>
+	<link rel="preconnect" href="https://fonts.googleapis.com"/>
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"/>
+	<style>
+		:root {
+			--bg: #0a0a0b;
+			--text: #f5f7fb;
+			--muted: #cfd5df;
+			--gold: #ffd75e;
+			--black: #000;
+			--ease: cubic-bezier(.22, .61, .36, 1);
+		}
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-  <link rel="preload" as="image" href="bg1.webp" imagesrcset="bg1.webp" imagesizes="100vw" />
+		* {
+			box-sizing: border-box;
+		}
 
-  <link rel="stylesheet" href="style.css" />
-  <script src="script.js" defer></script>
+		html,
+		body {
+			height: 100%;
+		}
+
+		html {
+			scroll-behavior: smooth;
+		}
+
+		body {
+			margin: 0;
+			font-family: Inter, -apple-system, system-ui, Segoe UI, Roboto, Arial, sans-serif;
+			color: var(--text);
+			background: var(--bg);
+			overflow-x: hidden;
+		}
+
+		/* Fixed backgrounds */
+		.bg-stack {
+			position: fixed;
+			inset: 0;
+			z-index: 0;
+			pointer-events: none;
+			overflow: hidden;
+			background:
+				radial-gradient(950px 420px at 85% -10%, rgba(255, 215, 94, .08), transparent 60%),
+				radial-gradient(900px 520px at 5% 110%, rgba(255, 215, 94, .05), transparent 60%),
+				linear-gradient(180deg, #0a0a0b, #0b0b0c 60%, #0a0a0b);
+		}
+
+		.bg-img {
+			position: absolute;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			opacity: 0;
+			transform: scale(1) translateZ(0);
+			will-change: transform, opacity;
+			filter: saturate(105%) contrast(105%) brightness(90%);
+		}
+
+		.bg-img.is-initial {
+			opacity: 1;
+		}
+
+		.bg-overlay {
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(180deg, rgba(0, 0, 0, .55), rgba(0, 0, 0, .35) 45%, rgba(0, 0, 0, .55));
+			pointer-events: none;
+		}
+
+		.grain {
+			position: absolute;
+			inset: -50%;
+			opacity: .06;
+			mix-blend-mode: soft-light;
+			background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="120" height="120" filter="url(%23n)"/></svg>');
+			background-size: 220px 220px;
+			animation: grain 12s linear infinite;
+			pointer-events: none;
+
+		}
+
+		@keyframes grain {
+			0% {
+				transform: translate3d(0, 0, 0);
+			}
+
+			100% {
+				transform: translate3d(-10%, -10%, 0);
+			}
+		}
+
+		/* Global layout */
+		main {
+			position: relative;
+			z-index: 5;
+		}
+
+		section {
+			min-height: 100svh;
+			display: grid;
+			place-items: center;
+			padding: 6rem 1rem 4rem;
+		}
+
+		.content {
+			width: min(1100px, 92vw);
+			text-align: center;
+
+		}
+
+		h1,
+		.headline {
+			font-weight: 900;
+			letter-spacing: -.02em;
+			line-height: 1.05;
+			font-size: clamp(2rem, 2rem + 4vw, 5rem);
+			margin: 0 0 1rem;
+			text-shadow: 0 2px 28px rgba(0, 0, 0, .45);
+
+		}
+
+		.gold {
+			color: var(--gold);
+			text-shadow: 0 0 22px rgba(255, 215, 94, .25);
+		}
+
+		.crest {
+			width: min(560px, 70vw);
+			aspect-ratio: auto;
+			margin: 0 auto 1.25rem;
+			display: block;
+
+			opacity: 0;
+			transform: scale(.9);
+
+
+		}
+
+		.cta-row {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 1rem;
+			margin-top: .75rem;
+			flex-wrap: wrap;
+		}
+
+		.btn {
+			appearance: none;
+			border: none;
+			border-radius: 999px;
+			padding: .85rem 1.2rem;
+			background: #ffffff;
+			color: #0b0b0c;
+			font-weight: 600;
+			font-size: 1rem;
+			box-shadow: 0 10px 24px rgba(0, 0, 0, .35);
+			cursor: pointer;
+			transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+			text-decoration: none;
+			display: inline-block;
+		}
+
+		.btn:hover {
+			transform: translateY(-1px);
+			box-shadow: 0 16px 32px rgba(0, 0, 0, .45);
+		}
+
+		.link {
+			color: #eef2f9;
+			text-decoration: none;
+			font-weight: 600;
+			font-size: 1rem;
+			opacity: .95;
+			transition: opacity .2s var(--ease), transform .2s var(--ease);
+		}
+
+		.link:hover {
+			opacity: 1;
+			text-decoration: underline;
+			text-underline-offset: 4px;
+		}
+
+		/* Quote layout */
+		.quote-wrap {
+			text-align: left;
+			margin-inline: auto;
+			width: min(1100px, 92vw);
+		}
+
+		.quote-lines {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+
+		.quote-line {
+			margin: .12rem 0;
+			padding: 0;
+			font-size: clamp(1.4rem, 1.1rem + 2.8vw, 3rem);
+			font-weight: 800;
+			letter-spacing: -.01em;
+			line-height: 1.18;
+			opacity: 0;
+			transform: translateY(60px);
+			text-shadow: 0 2px 28px rgba(0, 0, 0, .45);
+		}
+
+		.author {
+			margin: .95rem 0 0;
+			color: #e6e9f3;
+			font-weight: 600;
+			opacity: .95;
+			font-size: clamp(1rem, .9rem + .45vw, 1.1rem);
+			transform: translateY(40px);
+			opacity: 0;
+		}
+
+		.quote-cta {
+			margin-top: 1rem;
+		}
+
+		/* Intro title initial state */
+		.intro-title,
+		.intro-cta {
+			opacity: 0;
+			transform: translateY(60px);
+		}
+
+		/* Top progress (optional visual feedback) */
+		.progress-wrap {
+			position: fixed;
+			top: 0;
+			left: 0;
+			height: 3px;
+			width: 100%;
+			z-index: 20;
+			pointer-events: none;
+		}
+
+		.progress {
+			height: 100%;
+			width: 0%;
+			background: linear-gradient(90deg, #6c5, #ffd75e, #f8e07a);
+			box-shadow: 0 0 18px rgba(255, 215, 94, .55);
+		}
+
+		/* Modal */
+		.modal-backdrop {
+			position: fixed;
+			inset: 0;
+			display: none;
+			place-items: center;
+			background: rgba(6, 6, 7, .65);
+			-webkit-backdrop-filter: blur(6px);
+			backdrop-filter: blur(6px);
+			z-index: 50;
+		}
+
+		.modal-backdrop[aria-hidden="false"] {
+			display: grid;
+		}
+
+		.modal-card {
+			width: min(640px, 92vw);
+			background: rgba(255, 255, 255, .06);
+			border: 1px solid rgba(255, 255, 255, .12);
+			border-radius: 16px;
+			padding: 1rem 1rem 1.25rem;
+			-webkit-backdrop-filter: blur(10px);
+			backdrop-filter: blur(10px);
+			position: relative;
+			color: #eef2f9;
+			text-align: center;
+		}
+
+		.modal-title {
+			margin: 0 0 .25rem;
+			font-size: 1.4rem;
+			font-weight: 800;
+		}
+
+		.modal-sub {
+			margin: .25rem 0 0;
+			opacity: .9;
+		}
+
+		.modal-close {
+			position: absolute;
+			top: .6rem;
+			right: .6rem;
+			border: none;
+			background: #fff;
+			color: #111;
+			border-radius: 999px;
+			padding: .45rem .65rem;
+			cursor: pointer;
+			font-weight: 700;
+			box-shadow: 0 4px 14px rgba(0, 0, 0, .3);
+		}
+
+		/* Black overlay for initial fade */
+		.black-overlay {
+			position: fixed;
+			inset: 0;
+			background: #000;
+			z-index: 30;
+			pointer-events: none;
+		}
+
+		/* Reduced motion */
+		@media (prefers-reduced-motion: reduce) {
+
+			.bg-img,
+			.quote-line,
+			.author,
+			.crest,
+			.intro-title,
+			.intro-cta {
+				transition: none !important;
+				animation: none !important;
+			}
+		}
+
+		/* Apple-like header */
+		.apple-header {
+			position: fixed;
+			inset-inline: 0;
+			top: 0;
+			z-index: 60;
+			background: linear-gradient(180deg, rgba(10, 10, 11, .75), rgba(10, 10, 11, .35) 70%, rgba(10, 10, 11, 0));
+			-webkit-backdrop-filter: blur(10px) saturate(120%);
+			backdrop-filter: blur(10px) saturate(120%);
+			border-bottom: 1px solid rgba(255, 255, 255, .08);
+		}
+
+		.apple-header .inner {
+			max-width: 1280px;
+			margin: 0 auto;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			height: 60px;
+			padding: 0 16px;
+		}
+
+		.brand-left {
+			font-weight: 700;
+			letter-spacing: .2px;
+			font-size: 1.05rem;
+			color: #e9edf6;
+		}
+
+		.brand-left .accent {
+			font-weight: 800;
+		}
+
+		.nav-right {
+			display: flex;
+			align-items: center;
+			gap: 22px;
+		}
+
+		.nav-right a {
+			color: #e6ebf6;
+			text-decoration: none;
+			font-size: .9rem;
+			opacity: .85;
+			transition: opacity .25s var(--ease);
+		}
+
+		.nav-right a:hover {
+			opacity: 1;
+		}
+
+		.nav-right a[aria-current="true"] {
+			opacity: 1;
+			text-decoration: underline;
+			text-underline-offset: 4px;
+		}
+
+		.search-pill {
+			border: none;
+			border-radius: 999px;
+			padding: .45rem .85rem;
+			font-weight: 600;
+			font-size: .85rem;
+			background: #ffffff;
+			color: #0b0b0c;
+			box-shadow: 0 4px 14px rgba(0, 0, 0, .3);
+			transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+			cursor: pointer;
+		}
+
+		.search-pill:hover {
+			transform: translateY(-1px);
+			box-shadow: 0 10px 20px rgba(0, 0, 0, .35);
+		}
+	</style>
 </head>
+
 <body>
-  <a href="#main" class="skip-link" data-bypass-lock>Skip to content</a>
 
-  <div class="bg-stack" aria-hidden="true">
-    <img class="bg-img" src="bg1.webp" data-src="bg1.webp" data-srcset="bg1.webp" sizes="100vw" alt="" role="presentation" />
-    <img class="bg-img" src="bg6.webp" data-src="bg6.webp" data-srcset="bg6.webp" sizes="100vw" alt="" role="presentation" />
-    <img class="bg-img" src="bg3.webp" data-src="bg3.webp" data-srcset="bg3.webp" sizes="100vw" alt="" role="presentation" />
-    <img class="bg-img" src="bg5.webp" data-src="bg5.webp" data-srcset="bg5.webp" sizes="100vw" alt="" role="presentation" />
-    <img class="bg-img" src="bg4.webp" data-src="bg4.webp" data-srcset="bg4.webp" sizes="100vw" alt="" role="presentation" />
-    <div class="bg-overlay"></div>
-    <div class="grain"></div>
-  </div>
+	<!-- Backgrounds -->
+	<div class="bg-stack" aria-hidden="true">
+		<img class="bg-img is-initial" src="bg0.webp" alt=""/>
+		<img class="bg-img" src="bg1.webp" alt=""/>
+		<img class="bg-img" src="bg2.webp" alt=""/>
+		<img class="bg-img" src="bg3.webp" alt=""/>
+		<img class="bg-img" src="bg4.webp" alt=""/>
+		<img class="bg-img" src="bg5.webp" alt=""/>
+		<img class="bg-img" src="bg6.webp" alt=""/>
+		<img class="bg-img" src="bg7.webp" alt=""/>
+		<div class="bg-overlay"></div>
+		<div class="grain"></div>
+	</div>
 
-  <header class="apple-header" role="banner" aria-label="Primary">
-    <div class="inner">
-      <div class="brand-left">Careers at <span class="accent">MANCHESTER SAFE HOUSE</span></div>
-      <nav class="nav-right" aria-label="Global">
-        <a href="#section1">Overview</a>
-        <a href="#section2">Work with us</a>
-        <a href="#section3">Life with us</a>
-        <a href="#section4">Training</a>
-        <a href="#section5">Community</a>
-        <a href="#profile">My profile</a>
-        <button class="search-pill" type="button" data-open-modal="#accessModal">Search Roles</button>
-      </nav>
-    </div>
-  </header>
+	<header class="apple-header" role="banner" aria-label="Primary">
+		<div class="inner">
+			<div class="brand-left">Careers at <span class="accent">MANCHESTER SAFE HOUSE</span></div>
+			<nav class="nav-right" aria-label="Global">
+				<a href="#section1">Overview</a>
+				<a href="#section2">Work with us</a>
+				<a href="#section3">Life with us</a>
+				<a href="#section4">Training</a>
+				<a href="#section5">Community</a>
+				<a href="#profile">My profile</a>
+				<button class="search-pill" type="button" data-open-modal="#accessModal">Search Roles</button>
+			</nav>
+		</div>
+	</header>
 
-  <div class="progress-wrap" aria-hidden="true">
-    <div class="progress" id="progressBar"></div>
-  </div>
+	<!-- Progress (optional) -->
+	<div class="progress-wrap" aria-hidden="true">
+		<div class="progress" id="progressBar"></div>
+	</div>
 
-  <main id="main" tabindex="-1">
-    <section class="section" id="section1" data-bg-effect="zoomIn" data-bg-amt="0" aria-label="Intro">
-      <div class="content center">
-        <img id="crestImg" class="crest" src="crest.webp" width="1000" decoding="async" fetchpriority="high" alt="Manchester Safe House crest logo" />
-        <h1>Join us. <span class="gold">Be you.</span></h1>
-        <div class="cta-row cta-line centered-row">
-          <button class="btn-film" data-open-modal="#filmModal">Watch the film</button>
-          <a class="link-hardware" href="#section2">Learn how Manchester Safe House works <span class="chev">›</span></a>
-        </div>
-      </div>
-    </section>
+	<!-- Initial black fade -->
+	<div class="black-overlay" id="blackOverlay" aria-hidden="true"></div>
 
-    <section class="section" id="section2" data-bg-effect="diagonal" data-bg-amt="18" aria-label="Working at Manchester Safe House">
-      <div class="content quote">
-        <figure class="quote-block">
-          <blockquote>
-            <p class="lead text-line">This is where those people gather.</p>
-            <p class="lead text-line">The ones who drove at 2 a.m.,</p>
-            <p class="lead text-line">knocked in the rain,</p>
-            <p class="lead text-line">and heard “no” more times than you can count.</p>
-            <p class="lead text-line">What set me apart wasn’t a résumé.</p>
-            <p class="lead text-line">It was the hunger to succeed as badly as I wanted to breathe.</p>
-          </blockquote>
-          <figcaption class="author text-line">Derek 05, Sales Representative & Alarm Technician</figcaption>
-        </figure>
-        <div class="cta-row cta-line">
-          <button class="btn-film" data-open-modal="#filmModal">Watch the film</button>
-          <a class="link-hardware" href="#section3">Learn about working at Manchester Safe House <span class="chev">›</span></a>
-        </div>
-      </div>
-    </section>
+	<main>
+		<!-- Section 1 -->
+		<section class="section" id="section1" aria-label="Intro">
+			<div class="content">
+				<img id="crestImg" class="crest" src="crest.webp" alt="Manchester Safe House crest logo"/>
+				<h1>Join us. <span class="gold">Be you.</span></h1>
+				<div class="cta-row">
+					<button class="btn btn-primary" data-open-modal="#filmModal">
+						<i class="fa-solid fa-play"></i><span>Watch the film</span>
+					</button>
+				</div>
+			</div>
+		</section>
 
-    <section class="section" id="section3" data-bg-effect="panY" data-bg-amt="16" aria-label="Value of the grind">
-      <div class="content quote">
-        <figure class="quote-block">
-          <blockquote>
-            <p class="lead text-line">My determination turned into opportunity.</p>
-            <p class="lead text-line">What once just covered rent now built a house for my family</p>
-            <p class="lead text-line">and another for my mom.</p>
-          </blockquote>
-          <figcaption class="author text-line">Pedro 04, Sales Representative & Alarm Technician</figcaption>
-        </figure>
-        <div class="cta-row cta-line">
-          <button class="btn-film" data-open-modal="#filmModal">Watch the film</button>
-          <a class="link-hardware" href="#section4">Learn about life at Manchester Safe House <span class="chev">›</span></a>
-        </div>
-      </div>
-    </section>
 
-    <section class="section" id="section4" data-bg-effect="rotate" data-bg-amt="6" aria-label="Where resilience gathers">
-      <div class="content quote">
-        <figure class="quote-block">
-          <blockquote>
-            <p class="lead text-line">This work gave me more than a paycheck.</p>
-            <p class="lead text-line">It gave me purpose—to protect families and serve our community.</p>
-          </blockquote>
-          <figcaption class="author text-line">Albin 03, Sales Representative & Alarm Technician</figcaption>
-        </figure>
-        <div class="cta-row cta-line">
-          <button class="btn-film" data-open-modal="#filmModal">Watch the film</button>
-          <a class="link-hardware" href="#section5">Learn about training at Manchester Safe House <span class="chev">›</span></a>
-        </div>
-      </div>
-    </section>
+		<h1 class="intro-title"><span class="gold"></span></h1>
 
-    <section class="section" id="section5" data-bg-effect="parallaxY" data-bg-amt="20" aria-label="Belonging">
-      <div class="content quote">
-        <figure class="quote-block">
-          <blockquote>
-            <p class="lead text-line">I’m rewriting the life I thought was finished</p>
-            <p class="lead text-line">and building something that can’t be erased.</p>
-          </blockquote>
-          <figcaption class="author text-line">Tadju 01, Sales Representative & Alarm Technician</figcaption>
-        </figure>
-        <div class="cta-row cta-line">
-          <button class="btn-film" data-open-modal="#filmModal">Watch the film</button>
-          <a class="link-hardware" href="#section2">Learn about our Manchester community <span class="chev">›</span></a>
-        </div>
-      </div>
-    </section>
-  </main>
 
-  <footer role="contentinfo">
-    <p class="copyright">Copyright © ROBERT DEAN BARRETT LLC 2025</p>
-  </footer>
+		</div>
+		</section>
+		
+		<section id="quote1">
+			<div class="quote-wrap">
+				<ul class="quote-lines">
+					<li class="quote-line">This is where people gather</li>
+					<li class="quote-line">who drove at 2 AM,</li>
+					<li class="quote-line">knocked in the rain,</li>
+					<li class="quote-line">heard “no” more times</li>
+					<li class="quote-line">than we could count,</li>
+					<li class="quote-line">And what set us apart</li>
+					<li class="quote-line">wasn't a résumé,</li>
+					<li class="quote-line">it's our insatiable hunger to succeed</li>
+					<li class="quote-line">more than we</li>
+					<li class="quote-line">wanted to breathe.</li>
+				</ul>
+				<p class="author">Derek 05, Sales Representative & Alarm Technician</p>
+				<div class="cta-row quote-cta">
+					<a href="#" class="btn">Watch the film</a>
+					<a href="#" class="link">Learn about hardware</a>
+				</div>
+			</div>
+		</section>
+		
+		<section id="quote2">
+			<div class="quote-wrap">
+				<ul class="quote-lines">
+					<li class="quote-line">I’m writing a life that I had been convinced was over.</li>
+					<li class="quote-line">The work I’m doing now isn’t being erased.</li>
+					<li class="quote-line">The work I’ve done is still rewarding with a residual paycheck.</li>
+				</ul>
+				<p class="author">Tadju 01, Sales Representative & Alarm Technician</p>
+				<div class="cta-row quote-cta">
+					<a href="#" class="btn">Watch the film</a>
+					<a href="#" class="link">Learn about hardware</a>
+				</div>
+			</div>
+		</section>
 
-  <!-- Film Modal -->
-  <div id="filmModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="filmTitle" aria-describedby="filmDesc" hidden>
-    <div class="modal-card">
-      <button class="modal-close" data-close-modal aria-label="Close dialog"><i class="fa-solid fa-xmark"></i></button>
-      <div class="modal-body">
-        <h2 id="filmTitle" class="modal-title">Private Screening</h2>
-        <p id="filmDesc" class="modal-subtitle">Reserved for invitees. The link you received includes access details.</p>
-        <div class="modal-media">
-          <div class="modal-media-inner">
-            <i class="fa-solid fa-lock" aria-hidden="true"></i>
-            <p class="modal-media-text">Access required</p>
-          </div>
-        </div>
-        <div class="cta-row centered-row">
-          <button class="btn-film" data-close-modal>Got it</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- Access Required Modal -->
-  <div id="accessModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="accessTitle" aria-describedby="accessDesc" hidden>
-    <div class="modal-card">
-      <button class="modal-close" data-close-modal aria-label="Close dialog"><i class="fa-solid fa-xmark"></i></button>
-      <div class="modal-body">
-        <h2 id="accessTitle" class="modal-title">Access code required</h2>
-        <p id="accessDesc" class="modal-subtitle">Joining MANCHESTER SAFE HOUSE is by invite only.</p>
-        <div class="modal-media">
-          <div class="modal-media-inner">
-            <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
-            <p class="modal-media-text">Invite-only access</p>
-          </div>
-        </div>
-        <div class="cta-row centered-row">
-          <button class="btn-film" data-close-modal>Understood</button>
-        </div>
-      </div>
-    </div>
-  </div>
+		<section id="quote3">
+			<div class="quote-wrap">
+				<ul class="quote-lines">
+					<li class="quote-line">My determination turned into opportunity.</li>
+					<li class="quote-line">What once just covered rent,</li>
+					<li class="quote-line">now built a house for my children,</li>
+					<li class="quote-line">and another one down the street for my mom.</li>
+				</ul>
+				<p class="author">Pedro 04, Sales Representative & Alarm Technician</p>
+				<div class="cta-row quote-cta">
+					<a href="#" class="btn">Watch the film</a>
+					<a href="#" class="link">Learn about hardware</a>
+				</div>
+			</div>
+		</section>
 
-  <noscript>
-    <style>
-      .bg-img{left:0;top:0;width:100%;height:100%;opacity:1;object-fit:cover;transform:none;}
-    </style>
-  </noscript>
+
+		<section id="quote4">
+			<div class="quote-wrap">
+				<ul class="quote-lines">
+					<li class="quote-line">Finally, work has given me more than a paycheck--</li>
+					<li class="quote-line">It gave me purpose.</li>
+					<li class="quote-line">I protect families.</li>
+					<li class="quote-line">I serve my community.</li>
+				</ul>
+				<p class="author">Albin 03, Sales Representative & Alarm Technician</p>
+				<div class="cta-row quote-cta">
+					<a href="#" class="btn">Watch the film</a>
+					<a href="#" class="link">Learn about hardware</a>
+				</div>
+			</div>
+		</section>
+
+		
+	</main>
+
+	<!-- Access Modal -->
+	<div class="modal-backdrop" id="accessModal" aria-hidden="true" role="dialog" aria-labelledby="modalTitle" aria-describedby="modalDesc">
+		<div class="modal-card" role="document">
+			<button class="modal-close" type="button" aria-label="Close dialog">×</button>
+			<h2 id="modalTitle" class="modal-title">Access code required</h2>
+			<p id="modalDesc" class="modal-sub">Joining MANCHESTER SAFE HOUSE is by invite only. Access code required.</p>
+		</div>
+	</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+	<script>
+		(function() {
+			const hasGSAP = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
+			const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+			// Progress bar
+			const progressBar = document.getElementById('progressBar');
+
+			function updateProgress() {
+				const y = window.scrollY || document.documentElement.scrollTop;
+				const docH = document.documentElement.scrollHeight - window.innerHeight;
+				const pct = docH > 0 ? (y / docH) * 100 : 0;
+				if (progressBar) progressBar.style.width = pct + '%';
+			}
+			document.addEventListener('scroll', updateProgress, { passive: true });
+			updateProgress();
+
+			// Modal logic (intercept all links/buttons)
+			const accessModal = document.getElementById('accessModal');
+			const modalCloseBtn = accessModal.querySelector('.modal-close');
+			const main = document.querySelector('main');
+
+			function openModal() {
+				accessModal.setAttribute('aria-hidden', 'false');
+				document.body.style.overflow = 'hidden';
+				if (main) main.setAttribute('aria-hidden', 'true');
+				// focus trap minimal
+				modalCloseBtn.focus();
+
+				function onKey(e) { if (e.key === 'Escape') closeModal(); }
+				accessModal._esc = onKey;
+				document.addEventListener('keydown', onKey);
+			}
+
+			function closeModal() {
+				accessModal.setAttribute('aria-hidden', 'true');
+				document.body.style.overflow = '';
+				if (main) main.removeAttribute('aria-hidden');
+				document.removeEventListener('keydown', accessModal._esc || (() => {}));
+			}
+			modalCloseBtn.addEventListener('click', closeModal);
+			accessModal.addEventListener('click', (e) => { if (e.target === accessModal) closeModal(); });
+
+			document.addEventListener('click', (e) => {
+				const a = e.target.closest('a, button');
+				if (!a) return;
+				// Allow only modal close button to pass
+				if (a === modalCloseBtn) return;
+				e.preventDefault();
+				openModal();
+			});
+
+			// Initial fade from black + crest/title entrance
+			const black = document.getElementById('blackOverlay');
+			const crest = document.querySelector('.crest');
+			const introTitle = document.querySelector('.intro-title');
+			const introCta = document.querySelector('.intro-cta');
+			const bgs = Array.from(document.querySelectorAll('.bg-img'));
+
+			if (!prefersReduced) {
+				gsap.set([introTitle, introCta], { opacity: 1, y: 10 });
+				gsap.set(crest, { opacity: 0, scale: 0 });
+
+				const introTL = gsap.timeline();
+				introTL
+					.to(black, { opacity: 0, duration: 6, ease: 'power2.out', onComplete() { black.style.display = 'none'; } }, 0)
+					.to(crest, { yPercent: 0, xPercent: 0, scale: 1, opacity: 1, ease: 'none' }, 0)
+					.from(crest, { scale: 1, opacity: 1, ease: 'none' }, 0)
+					.to(introTitle, { opacity: 1, y: 0, duration: 3, ease: 'power3.out' }, 3)
+					.to(introCta, { opacity: 1, y: 0, duration: 3, ease: 'power3.out' }, 3);
+			} else {
+				black.style.display = 'none';
+				crest.style.opacity = 1;
+				crest.style.transform = 'none';
+				introTitle.style.opacity = 1;
+				introTitle.style.transform = 'none';
+				introCta.style.opacity = 1;
+				introCta.style.transform = 'none';
+			}
+
+			if (!hasGSAP || prefersReduced) return;
+			gsap.registerPlugin(ScrollTrigger);
+
+			// Helper to ensure only certain bg visible at certain times
+			function fadeToBG(showIdx, opts = {}) {
+				bgs.forEach((img, i) => {
+					gsap.to(img, {
+						opacity: i === showIdx ? 1 : 0,
+						duration: opts.duration || 10,
+						ease: opts.ease || 'power2.out',
+						overwrite: 'auto'
+					});
+				});
+			}
+
+			// INTRO SCROLL TRANSITION: crest zooms/fades, bg0 moves up/fades, bg2 zooms out to wide
+			const introST = ScrollTrigger.create({
+				trigger: '#intro',
+				start: 'top left',
+				end: '+=10%',
+				scrub: 0,
+				pin: true,
+				onEnter: () => fadeToBG(0, { duration: 1 }),
+				
+			});
+
+			const introTL = gsap.timeline({ scrollTrigger: introST });
+			introTL
+				// Crest zoom + fade out
+
+
+				.from(bgs[0], { yPercent: -10, xPercent: 31, scale: 1.5, opacity: 1, ease: 'none' }, 0)
+
+				// BG1: drift up and fade a bit
+				.to(bgs[0], { yPercent: 3, xPercent: -8, opacity: 1, scale: .8, ease: 'none' }, 0)
+				
+
+
+
+
+			// QUOTE 1: reveal lines, background 2 subtly drifts
+			const q1 = document.querySelector('#quote1');
+			const q1Lines = q1.querySelectorAll('.quote-line');
+			const q1TL = gsap.timeline({
+				scrollTrigger: {
+					trigger: '#quote1',
+					start: 'top',
+					end: '+=140%',
+					scrub: 0.6,
+					pin: true,
+					onEnter: () => fadeToBG(1, { duration: .6 }),
+					onEnterBack: () => fadeToBG(1, { duration: .6 })
+				}
+			});
+			// slight drift for bg2 during q1
+			q1TL.to(bgs[1], { scale: 1, yPercent: 0, xPercent: 0, ease: 'none' }, 0);
+			q1Lines.forEach((line, i) => {
+				q1TL.to(line, { opacity: 1, y: 0, duration: 0.2, ease: 'power2.out' }, i * 0.2 + 0.05);
+			});
+			q1TL.to(q1.querySelector('.author'), { opacity: 1, y: 0, duration: 0.25, ease: 'power2.out' }, q1Lines.length * 0.2 + 0.1);
+
+			// QUOTE 2: bg2 fades, bg3 fades in from static then pans/zooms to full image
+			const q2 = document.querySelector('#quote2');
+			const q2Lines = q2.querySelectorAll('.quote-line');
+			const q2TL = gsap.timeline({
+				scrollTrigger: {
+					trigger: '#quote2',
+					start: 'top top',
+					end: '+=140%',
+					scrub: 0.6,
+					pin: true,
+					onEnter: () => fadeToBG(2, { duration: .6 }),
+					onEnterBack: () => fadeToBG(2, { duration: .6 })
+				}
+			});
+			// Transition bg: fade out 2, fade in 3, then pan/zoom 3
+			q2TL
+			
+				.to(bgs[1], { opacity: 0.0, duration: 0.5, ease: 'power2.out' }, 0)
+				.fromTo(bgs[2], { opacity: 0, scale: 1.18 }, { opacity: 1, scale: 1.04, duration: 0.8, ease: 'power2.out' }, 0)
+				.to(bgs[2], { scale: 1, yPercent: -8, ease: 'none' }, 0.2);
+			q2Lines.forEach((line, i) => {
+				q2TL.to(line, { opacity: 1, y: 0, duration: 0.2, ease: 'power2.out' }, i * 0.22 + 0.08);
+			});
+			q2TL.to(q2.querySelector('.author'), { opacity: 1, y: 0, duration: 0.25, ease: 'power2.out' }, q2Lines.length * 0.22 + 0.1);
+
+			// QUOTE 3: image 3 rotates out to reveal image 4, then lines
+			const q3 = document.querySelector('#quote3');
+			const q3Lines = q3.querySelectorAll('.quote-line');
+			const q3TL = gsap.timeline({
+				scrollTrigger: {
+					trigger: '#quote3',
+					start: 'top top',
+					end: '+=140%',
+					scrub: 0.6,
+					pin: true,
+					onEnter: () => fadeToBG(3, { duration: .6 }),
+					onEnterBack: () => fadeToBG(3, { duration: .6 })
+				}
+			});
+			q3TL
+				.to(bgs[2], { rotation: 8, opacity: 0, duration: 0.6, ease: 'power2.out' }, 0)
+				.fromTo(bgs[3], { opacity: 0, scale: 1.08 }, { opacity: 1, scale: 1, duration: 0.7, ease: 'power2.out' }, 0.05);
+			q3Lines.forEach((line, i) => {
+				q3TL.to(line, { opacity: 1, y: 0, duration: 0.2, ease: 'power2.out' }, i * 0.22 + 0.1);
+			});
+			q3TL.to(q3.querySelector('.author'), { opacity: 1, y: 0, duration: 0.25, ease: 'power2.out' }, q3Lines.length * 0.22 + 0.12);
+
+			// QUOTE 4: image 4 fades into 5; image 5 zooms out to fill screen; lines
+			const q4 = document.querySelector('#quote1');
+			const q4Lines = q4.querySelectorAll('.quote-line');
+			const q4TL = gsap.timeline({
+				scrollTrigger: {
+					trigger: '#quote4',
+					start: 'top top',
+					end: '+=140%',
+					scrub: 0.6,
+					pin: true,
+					onEnter: () => fadeToBG(4, { duration: .6 }),
+					onEnterBack: () => fadeToBG(4, { duration: .6 })
+				}
+			});
+			q4TL
+				.to(bgs[3], { opacity: 0, duration: 0.5, ease: 'power2.out' }, 0)
+				.fromTo(bgs[4], { opacity: 0, scale: 1.18 }, { opacity: 1, scale: 1.04, duration: 0.8, ease: 'power2.out' }, 0.05)
+				.to(bgs[4], { scale: 1, ease: 'none' }, 0.4);
+			q4Lines.forEach((line, i) => {
+				q4TL.to(line, { opacity: 1, y: 0, duration: 0.2, ease: 'power2.out' }, i * 0.22 + 0.1);
+			});
+			q4TL.to(q4.querySelector('.author'), { opacity: 1, y: 0, duration: 0.25, ease: 'power2.out' }, q4Lines.length * 0.22 + 0.12);
+
+		})();
+		
+	</script>
 </body>
+
 </html>
