@@ -1,197 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Manchester Safe House -- Join us. Be you.</title>
-  <meta name="description" content="Join Manchester Safe House. Purposeful work protecting families and serving our community." />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet" />
+  <meta name="description" content="Join Manchester Safe House. Purposeful work protecting families and serving our community."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"/>
 
   <style>
-    :root {
-      --bg: #0a0a0b;
-      --text: #f5f7fb;
-      --muted: #cfd5df;
-      --gold: #ffd75e;
-      --ease: cubic-bezier(.22, .61, .36, 1);
+    :root{
+      --bg:#0a0a0b;
+      --text:#f5f7fb;
+      --muted:#cfd5df;
+      --gold:#ffd75e;
+      --ease:cubic-bezier(.22,.61,.36,1);
     }
-
-    * { box-sizing: border-box }
-
-    html, body { height: 100% }
-
-    html { scroll-behavior: smooth }
-
-    body {
-      margin: 0;
-      font-family: Inter, -apple-system, system-ui, Segoe UI, Roboto, Arial, sans-serif;
-      color: var(--text);
-      background: var(--bg);
-      overflow-x: hidden;
+    *{ box-sizing:border-box }
+    html,body{ height:100% }
+    html{ scroll-behavior:smooth }
+    body{
+      margin:0;
+      font-family:Inter, -apple-system, system-ui, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:var(--bg);
+      overflow-x:hidden;
     }
 
     /* Skip link */
-    .skip-link {
-      position: absolute;
-      left: -9999px;
-      top: auto;
-      width: 1px;
-      height: 1px;
-      overflow: hidden
-    }
-    .skip-link:focus {
-      left: 1rem; top: 1rem; width: auto; height: auto; padding: .5rem .75rem;
-      background: #111; color: #fff; border-radius: .5rem; z-index: 100
-    }
+    .skip-link{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
+    .skip-link:focus{ left:1rem; top:1rem; width:auto; height:auto; padding:.5rem .75rem; background:#111; color:#fff; border-radius:.5rem; z-index:100 }
 
     /* Background stack */
-    .bg-stack {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      overflow: hidden;
+    .bg-stack{
+      position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
       background:
-        radial-gradient(950px 420px at 85% -10%, rgba(255, 215, 94, .08), transparent 60%),
-        radial-gradient(900px 520px at 5% 110%, rgba(255, 215, 94, .05), transparent 60%),
+        radial-gradient(950px 420px at 85% -10%, rgba(255,215,94,.08), transparent 60%),
+        radial-gradient(900px 520px at 5% 110%, rgba(255,215,94,.05), transparent 60%),
         linear-gradient(180deg, #0a0a0b, #0b0b0c 60%, #0a0a0b);
     }
-    .bg-img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0;
-      transform: scale(1) translateZ(0);
-      will-change: transform, opacity;
-      filter: saturate(105%) contrast(105%) brightness(90%);
-      transition: opacity .6s var(--ease);
+    .bg-img{
+      position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+      opacity:0; transform:translateZ(0); will-change:transform,opacity;
+      filter:saturate(105%) contrast(105%) brightness(90%);
+      transition:opacity .6s var(--ease);
+      z-index:0;
     }
-    .bg-img.is-initial { opacity: 1 }
-    .bg-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(0, 0, 0, .58), rgba(0, 0, 0, .35) 45%, rgba(0, 0, 0, .58))
+    .bg-img.top{ z-index:2; } /* ensure bg0 overlays bg2 during reveal */
+    .bg-overlay{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.58), rgba(0,0,0,.35) 45%, rgba(0,0,0,.58)) }
+    .grain{
+      position:absolute; inset:-50%; opacity:.06; mix-blend-mode:soft-light; pointer-events:none;
+      background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="120" height="120" filter="url(%23n)"/></svg>');
+      background-size:220px 220px; animation:grain 12s linear infinite;
     }
-    .grain {
-      position: absolute; inset: -50%; opacity: .06; mix-blend-mode: soft-light; pointer-events: none;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="120" height="120" filter="url(%23n)"/></svg>');
-      background-size: 220px 220px; animation: grain 12s linear infinite;
-    }
-    @keyframes grain { 0% { transform: translate3d(0,0,0) } 100% { transform: translate3d(-10%, -10%, 0) } }
+    @keyframes grain{ 0%{ transform:translate3d(0,0,0) } 100%{ transform:translate3d(-10%,-10%,0) } }
 
     /* Apple-like header */
-    .apple-header {
-      position: fixed; inset-inline: 0; top: 0; z-index: 60;
-      background: linear-gradient(180deg, rgba(10, 10, 11, .75), rgba(10, 10, 11, .35) 70%, rgba(10, 10, 11, 0));
-      -webkit-backdrop-filter: blur(10px) saturate(120%);
-      backdrop-filter: blur(10px) saturate(120%);
-      border-bottom: 1px solid rgba(255, 255, 255, .08);
+    .apple-header{
+      position:fixed; inset-inline:0; top:0; z-index:60;
+      background:linear-gradient(180deg, rgba(10,10,11,.75), rgba(10,10,11,.35) 70%, rgba(10,10,11,0));
+      -webkit-backdrop-filter:blur(10px) saturate(120%); backdrop-filter:blur(10px) saturate(120%);
+      border-bottom:1px solid rgba(255,255,255,.08);
+      transform:translateY(-100%); opacity:0; /* slide-in initial state */
     }
-    .apple-header .inner {
-      max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between;
-      height: 60px; padding: 0 16px;
+    .apple-header .inner{
+      max-width:1280px; margin:0 auto; display:flex; align-items:center; justify-content:space-between;
+      height:60px; padding:0 16px;
     }
-    .brand-left { font-weight: 800; letter-spacing: .2px; font-size: 1.05rem; color: #e9edf6; }
-    .brand-left .accent { font-weight: 900; }
-    .nav-right { display: flex; align-items: center; gap: 22px; }
-    .nav-right a {
-      color: #e6ebf6; text-decoration: none; font-size: .9rem; opacity: .85; transition: opacity .25s var(--ease);
+    .brand-left{ font-weight:800; letter-spacing:.2px; font-size:1.05rem; color:#e9edf6; }
+    .brand-left .accent{ font-weight:900; }
+    .nav-right{ display:flex; align-items:center; gap:22px; }
+    .nav-right a{ color:#e6ebf6; text-decoration:none; font-size:.9rem; opacity:.85; transition:opacity .25s var(--ease) }
+    .nav-right a:hover{ opacity:1 }
+    .nav-right a[aria-current="true"]{ opacity:1; text-decoration:underline; text-underline-offset:4px }
+    .search-pill{
+      border:none; border-radius:999px; padding:.45rem .85rem; font-weight:700; font-size:.85rem;
+      background:#ffffff; color:#0b0b0c; box-shadow:0 4px 14px rgba(0,0,0,.3); cursor:pointer;
+      transition:transform .2s var(--ease), box-shadow .2s var(--ease);
     }
-    .nav-right a:hover { opacity: 1; }
-    .nav-right a[aria-current="true"] { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
-    .search-pill {
-      border: none; border-radius: 999px; padding: .45rem .85rem; font-weight: 700; font-size: .85rem;
-      background: #ffffff; color: #0b0b0c; box-shadow: 0 4px 14px rgba(0, 0, 0, .3); cursor: pointer;
-      transition: transform .2s var(--ease), box-shadow .2s var(--ease);
-    }
-    .search-pill:hover { transform: translateY(-1px); box-shadow: 0 10px 20px rgba(0, 0, 0, .35) }
+    .search-pill:hover{ transform:translateY(-1px); box-shadow:0 10px 20px rgba(0,0,0,.35) }
 
     /* Progress bar */
-    .progress-wrap {
-      position: fixed; top: 0; left: 0; height: 3px; width: 100%; z-index: 65; pointer-events: none
-    }
-    .progress {
-      height: 100%; width: 0%; background: linear-gradient(90deg, #6c5, #ffd75e, #f8e07a);
-      box-shadow: 0 0 18px rgba(255, 215, 94, .55)
-    }
+    .progress-wrap{ position:fixed; top:0; left:0; height:3px; width:100%; z-index:65; pointer-events:none }
+    .progress{ height:100%; width:0%; background:linear-gradient(90deg, #6c5, #ffd75e, #f8e07a); box-shadow:0 0 18px rgba(255,215,94,.55) }
 
     /* Sections */
-    main { position: relative; z-index: 5 }
-    section {
-      min-height: 100vh; display: grid; place-items: center; padding: 6rem 1rem 4rem
-    }
-    @supports (height: 100svh) { section { min-height: 100svh } }
+    main{ position:relative; z-index:5 }
+    section{ min-height:100vh; display:grid; place-items:center; padding:6rem 1rem 4rem }
+    @supports (height:100svh){ section{ min-height:100svh } }
+    .content{ width:min(1100px, 92vw); text-align:center }
 
-    .content { width: min(1100px, 92vw); text-align: center }
+    .crest{
+      width:min(560px, 70vw); height:auto; margin:0 auto 1.25rem; display:block;
+      filter:drop-shadow(0 28px 60px rgba(0,0,0,.6));
+      opacity:0; transform:scale(.9);
+    }
+    h1{
+      font-weight:900; letter-spacing:-.02em; line-height:1.05;
+      font-size:clamp(2rem, 2rem + 4vw, 5rem); margin:0 0 1rem;
+      text-shadow:0 2px 28px rgba(0,0,0,.45);
+    }
+    .gold{ color:var(--gold); text-shadow:0 0 22px rgba(255,215,94,.25) }
 
-    .crest {
-      width: min(560px, 70vw); height: auto; margin: 0 auto 1.25rem; display: block;
-      filter: drop-shadow(0 28px 60px rgba(0, 0, 0, .6));
-      opacity: 0; transform: scale(.9);
+    .cta-row{ display:flex; align-items:center; justify-content:center; gap:1rem; margin-top:.75rem; flex-wrap:wrap }
+    .btn{
+      appearance:none; border:none; border-radius:999px; padding:.85rem 1.2rem;
+      background:#ffffff; color:#0b0b0c; font-weight:700; font-size:1rem;
+      box-shadow:0 10px 24px rgba(0,0,0,.35); cursor:pointer; text-decoration:none; display:inline-block
     }
-
-    h1 {
-      font-weight: 900; letter-spacing: -.02em; line-height: 1.05;
-      font-size: clamp(2rem, 2rem + 4vw, 5rem); margin: 0 0 1rem;
-      text-shadow: 0 2px 28px rgba(0, 0, 0, .45)
-    }
-    .gold { color: var(--gold); text-shadow: 0 0 22px rgba(255, 215, 94, .25) }
-
-    .cta-row {
-      display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: .75rem; flex-wrap: wrap
-    }
-    .btn {
-      appearance: none; border: none; border-radius: 999px; padding: .85rem 1.2rem;
-      background: #ffffff; color: #0b0b0c; font-weight: 700; font-size: 1rem;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, .35); cursor: pointer; text-decoration: none; display: inline-block
-    }
-    .btn:hover { transform: translateY(-1px); box-shadow: 0 16px 32px rgba(0, 0, 0, .45) }
-    .link { color: #eef2f9; text-decoration: none; font-weight: 700; font-size: 1rem; opacity: .95 }
-    .link:hover { opacity: 1; text-decoration: underline; text-underline-offset: 4px }
+    .btn:hover{ transform:translateY(-1px); box-shadow:0 16px 32px rgba(0,0,0,.45) }
+    .link{ color:#eef2f9; text-decoration:none; font-weight:700; font-size:1rem; opacity:.95 }
+    .link:hover{ opacity:1; text-decoration:underline; text-underline-offset:4px }
 
     /* Quotes */
-    .quote-wrap { text-align: left; margin-inline: auto; width: min(1100px, 92vw) }
-    .quote-lines { margin: 0; padding: 0; list-style: none }
-    .quote-line {
-      margin: .12rem 0; padding: 0;
-      font-size: clamp(1.4rem, 1.1rem + 2.8vw, 3rem);
-      font-weight: 800; letter-spacing: -.01em; line-height: 1.18;
-      opacity: 0; transform: translateY(60px);
-      text-shadow: 0 2px 28px rgba(0, 0, 0, .45);
+    .quote-wrap{ text-align:left; margin-inline:auto; width:min(1100px, 92vw) }
+    .quote-lines{ margin:0; padding:0; list-style:none }
+    .quote-line{
+      margin:.12rem 0; padding:0;
+      font-size:clamp(1.4rem, 1.1rem + 2.8vw, 3rem);
+      font-weight:800; letter-spacing:-.01em; line-height:1.18;
+      opacity:0; transform:translateY(60px);
+      text-shadow:0 2px 28px rgba(0,0,0,.45);
     }
-    .author {
-      margin: .95rem 0 0; color: #e6e9f3; font-weight: 600;
-      font-size: clamp(1rem, .9rem + .45vw, 1.1rem);
-      transform: translateY(40px); opacity: 0
+    .author{
+      margin:.95rem 0 0; color:#e6e9f3; font-weight:600;
+      font-size:clamp(1rem, .9rem + .45vw, 1.1rem);
+      transform:translateY(40px); opacity:0
     }
 
-    .intro-title, .intro-cta { opacity: 0; transform: translateY(40px) }
+    .intro-title, .intro-cta{ opacity:0; transform:translateY(60px) }
 
     /* Initial black overlay */
-    .black-overlay {
-      position: fixed; inset: 0; background: #000; z-index: 30; pointer-events: none
-    }
+    .black-overlay{ position:fixed; inset:0; background:#000; z-index:30; pointer-events:none }
 
     /* No-JS fallback */
-    .no-js .bg-img { opacity: 1 !important }
-    .no-js .intro-title, .no-js .intro-cta, .no-js .crest, .no-js .quote-line, .no-js .author {
-      opacity: 1 !important; transform: none !important
-    }
+    .no-js .bg-img{ opacity:1 !important }
+    .no-js .intro-title, .no-js .intro-cta, .no-js .crest, .no-js .quote-line, .no-js .author{ opacity:1 !important; transform:none !important }
 
-    @media (prefers-reduced-motion: reduce) {
-      .bg-img, .quote-line, .author, .crest, .intro-title, .intro-cta {
-        transition: none !important; animation: none !important
-      }
+    @media (prefers-reduced-motion: reduce){
+      .bg-img, .quote-line, .author, .crest, .intro-title, .intro-cta{ transition:none !important; animation:none !important }
     }
 
     /* Anchor offset for fixed header */
-    :target::before { content: ""; display: block; height: 60px; margin-top: -60px; }
-    @media (max-width:640px) { :target::before { height: 56px; margin-top: -56px; } }
+    :target::before{ content:""; display:block; height:60px; margin-top:-60px; }
+    @media (max-width:640px){ :target::before{ height:56px; margin-top:-56px; } }
   </style>
 </head>
 <body class="no-js">
@@ -199,7 +152,7 @@
 
   <!-- Backgrounds -->
   <div class="bg-stack" aria-hidden="true">
-    <img class="bg-img is-initial" src="bg0.webp" alt="" role="presentation" />
+    <img class="bg-img top" src="bg0.webp" alt="" role="presentation" />
     <img class="bg-img" src="bg1.webp" alt="" role="presentation" />
     <img class="bg-img" src="bg2.webp" alt="" role="presentation" />
     <img class="bg-img" src="bg3.webp" alt="" role="presentation" />
@@ -231,31 +184,28 @@
     </div>
   </header>
 
-  <div class="progress-wrap" aria-hidden="true">
-    <div class="progress" id="progressBar"></div>
-  </div>
+  <div class="progress-wrap" aria-hidden="true"><div class="progress" id="progressBar"></div></div>
   <div class="black-overlay" id="blackOverlay" aria-hidden="true"></div>
 
   <main id="main" tabindex="-1" aria-label="Manchester Safe House intro and quotes">
     <!-- Intro -->
     <section id="intro">
       <div class="content">
-        <!-- Inline crest (SVG) -->
+        <!-- Crest -->
         <svg class="crest" viewBox="0 0 200 200" role="img" aria-label="Manchester Safe House crest">
           <defs>
             <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
-              <stop offset="0" stop-color="#ffd75e" />
-              <stop offset="1" stop-color="#fff3b0" />
+              <stop offset="0" stop-color="#ffd75e"/><stop offset="1" stop-color="#fff3b0"/>
             </linearGradient>
             <filter id="inner" x="-20%" y="-20%" width="140%" height="140%">
-              <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="rgba(0,0,0,.45)" />
+              <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="rgba(0,0,0,.45)"/>
             </filter>
           </defs>
-          <circle cx="100" cy="100" r="92" fill="url(#g)" opacity="0.18" />
-          <path d="M100 22 L160 50 L160 102 C160 140 132 170 100 178 C68 170 40 140 40 102 L40 50 Z" fill="url(#g)" filter="url(#inner)" />
-          <path d="M100 48 L140 66 L140 100 C140 128 122 150 100 156 C78 150 60 128 60 100 L60 66 Z" fill="#0b0b0c" opacity="0.85" />
-          <path d="M88 105 h24 v34 h-24 z" fill="url(#g)" opacity="0.8" />
-          <circle cx="100" cy="88" r="10" fill="url(#g)" />
+          <circle cx="100" cy="100" r="92" fill="url(#g)" opacity="0.18"/>
+          <path d="M100 22 L160 50 L160 102 C160 140 132 170 100 178 C68 170 40 140 40 102 L40 50 Z" fill="url(#g)" filter="url(#inner)"/>
+          <path d="M100 48 L140 66 L140 100 C140 128 122 150 100 156 C78 150 60 128 60 100 L60 66 Z" fill="#0b0b0c" opacity="0.85"/>
+          <path d="M88 105 h24 v34 h-24 z" fill="url(#g)" opacity="0.8"/>
+          <circle cx="100" cy="88" r="10" fill="url(#g)"/>
         </svg>
 
         <h1 class="intro-title">Join us. <span class="gold">Be you.</span></h1>
@@ -416,41 +366,38 @@
 
   <noscript>
     <style>
-      .bg-img { opacity:1 !important }
-      .intro-title, .intro-cta, .crest, .quote-line, .author { opacity:1 !important; transform:none !important }
+      .bg-img{ opacity:1 !important }
+      .intro-title, .intro-cta, .crest, .quote-line, .author{ opacity:1 !important; transform:none !important }
     </style>
   </noscript>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" crossorigin="anonymous"></script>
   <script>
-    (function() {
-      // JS ready
+    (function(){
       document.body.classList.remove('no-js');
 
       // Modal handling (intercept clicks)
       const accessModal = document.getElementById('accessModal');
       const modalCloseBtn = accessModal.querySelector('.modal-close');
       const main = document.querySelector('main');
-      function openModal() {
-        accessModal.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
-        if (main) main.setAttribute('aria-hidden', 'true');
+      function openModal(){
+        accessModal.setAttribute('aria-hidden','false');
+        document.body.style.overflow='hidden';
+        if (main) main.setAttribute('aria-hidden','true');
         modalCloseBtn.focus();
-        accessModal._esc = (e) => { if (e.key === 'Escape') closeModal(); };
+        accessModal._esc = (e)=>{ if (e.key === 'Escape') closeModal(); };
         document.addEventListener('keydown', accessModal._esc);
       }
-      function closeModal() {
-        accessModal.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
+      function closeModal(){
+        accessModal.setAttribute('aria-hidden','true');
+        document.body.style.overflow='';
         if (main) main.removeAttribute('aria-hidden');
-        document.removeEventListener('keydown', accessModal._esc || (() => {}));
+        document.removeEventListener('keydown', accessModal._esc || (()=>{}));
       }
       modalCloseBtn.addEventListener('click', closeModal);
-      accessModal.addEventListener('click', (e) => { if (e.target === accessModal) closeModal(); });
-
-      // Intercept all a/button clicks except the modal close and skip-link
-      document.addEventListener('click', (e) => {
+      accessModal.addEventListener('click', (e)=>{ if (e.target === accessModal) closeModal(); });
+      document.addEventListener('click', (e)=>{
         const t = e.target.closest('a, button');
         if (!t) return;
         if (t.hasAttribute('data-bypass') || t === modalCloseBtn) return;
@@ -460,73 +407,73 @@
 
       // Progress bar
       const progressBar = document.getElementById('progressBar');
-      function updateProgress() {
+      function updateProgress(){
         const y = window.scrollY || document.documentElement.scrollTop;
         const docH = document.documentElement.scrollHeight - window.innerHeight;
         const pct = docH > 0 ? (y / docH) * 100 : 0;
         if (progressBar) progressBar.style.width = pct + '%';
       }
-      document.addEventListener('scroll', updateProgress, { passive: true });
+      document.addEventListener('scroll', updateProgress, { passive:true });
       updateProgress();
 
       const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const hasGSAP = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
+      if (!hasGSAP) return;
+      gsap.registerPlugin(ScrollTrigger);
+
       const black = document.getElementById('blackOverlay');
+      const header = document.querySelector('.apple-header');
       const crest = document.querySelector('.crest');
       const introTitle = document.querySelector('.intro-title');
       const introCta = document.querySelector('.intro-cta');
       const bgs = Array.from(document.querySelectorAll('.bg-img'));
+      const bg0 = bgs[0];
+      const bg2 = bgs[2];
 
-      // Intro fade from black and crest entrance
-      if (!prefersReduced && hasGSAP) {
-        gsap.set([introTitle, introCta], { opacity: 0, y: 40 });
-        gsap.set(crest, { opacity: 0, scale: 0.9 });
-        gsap.timeline()
-          .to(black, { opacity: 0, duration: 0.9, ease: 'power2.out', onComplete() { black.style.display = 'none'; } }, 0)
-          .to(crest, { opacity: 1, scale: 1, duration: 0.85, ease: 'power3.out' }, 0.1)
-          .to(introTitle, { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' }, 0.35)
-          .to(introCta, { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' }, 0.45);
+      // Initial states: all hidden, bg2 visible underneath, bg0 fades in
+      gsap.set(bgs, { opacity: 0 });
+      if (bg2) gsap.set(bg2, { opacity: 1 }); // underlying static
+      if (bg0) gsap.set(bg0, { opacity: 0, yPercent: 0 }); // will fade in then scroll up
+      gsap.set([introTitle, introCta], { opacity: 0, y: 60 });
+      gsap.set(crest, { opacity: 0, scale: 0.9 });
+
+      // Entrance timeline
+      if (!prefersReduced){
+        const tl = gsap.timeline();
+        tl.to(header, { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }, 0.1) // nav slides in
+          .to(crest, { opacity: 1, scale: 1, duration: 0.8, ease: 'power3.out' }, 0.2) // crest appears
+          .to(bg0, { opacity: 1, duration: 0.8, ease: 'power2.out' }, 0.2) // bg0 fades in
+          .to(introTitle, { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' }, 0.45) // title in
+          .to(introCta, { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' }, 0.55) // cta in
+          .to(black, { opacity: 0, duration: 0.9, ease: 'power2.out', onComplete(){ black.style.display='none'; }}, 0.0); // fade from black
       } else {
-        black.style.display = 'none';
-        crest.style.opacity = 1; crest.style.transform = 'none';
-        introTitle.style.opacity = 1; introTitle.style.transform = 'none';
-        introCta.style.opacity = 1; introCta.style.transform = 'none';
+        black.style.display='none';
+        header.style.transform='none'; header.style.opacity='1';
+        crest.style.opacity='1'; crest.style.transform='none';
+        bg0.style.opacity='1';
+        introTitle.style.opacity='1'; introTitle.style.transform='none';
+        introCta.style.opacity='1'; introCta.style.transform='none';
       }
 
-      if (!hasGSAP || prefersReduced) return;
-      gsap.registerPlugin(ScrollTrigger);
-
-      function fadeToBG(showIdx, opts = {}) {
-        bgs.forEach((img, i) => {
-          gsap.to(img, {
-            opacity: i === showIdx ? 1 : 0,
-            duration: opts.duration || 0.8,
-            ease: opts.ease || 'power2.out',
-            overwrite: 'auto'
-          });
-        });
-      }
-
-      // Intro scroll: crest zooms/fades, bg0 drifts up, bg1 zooms out and fades in
+      // Intro scroll segment: crest + CTA fade out and bg0 scrolls up revealing bg2
       const introST = ScrollTrigger.create({
         trigger: '#intro',
         start: 'top top',
         end: '+=120%',
         scrub: 0.6,
-        pin: true,
-        onEnter: () => fadeToBG(0, { duration: .6 }),
-        onEnterBack: () => fadeToBG(0, { duration: .6 })
+        pin: true
       });
       gsap.timeline({ scrollTrigger: introST })
-        .to('.crest', { scale: 1.7, opacity: 0, ease: 'none' }, 0)
-        .to(bgs[0], { yPercent: -12, opacity: 0.25, ease: 'none' }, 0)
-        .fromTo(bgs[1], { scale: 1.35, opacity: 0 }, { scale: 1, opacity: 1, ease: 'none' }, 0);
+        .to(crest, { opacity: 0, duration: 0.5, ease: 'power1.out' }, 0.05)
+        .to(introCta, { opacity: 0, duration: 0.5, ease: 'power1.out' }, 0.05)
+        .to(bg0, { yPercent: -100, ease: 'none' }, 0); // only bg0 moves up
 
-      // Helper to create quote timelines
-      function makeQuoteTL({ id, bgIndex, prevIndex, drift = { scale: 1.04, y: -6 }, rotateOut = false }) {
+      // Helper to create quote timelines (lines reveal while pinned)
+      function makeQuoteTL({ id, bgIndex, prevIndex, rotateOut = false, driftY = -6, driftScale = 1.04 }){
         const sec = document.querySelector(id);
         if (!sec) return;
         const lines = sec.querySelectorAll('.quote-line');
+        const author = sec.querySelector('.author');
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: id,
@@ -534,47 +481,51 @@
             end: '+=140%',
             scrub: 0.6,
             pin: true,
-            onEnter: () => fadeToBG(bgIndex, { duration: .6 }),
-            onEnterBack: () => fadeToBG(bgIndex, { duration: .6 })
+            onEnter: () => {
+              // hide all except current bgIndex
+              bgs.forEach((img, i)=> gsap.to(img, { opacity: i === bgIndex ? 1 : 0, duration: 0.6, ease: 'power2.out', overwrite: 'auto' }));
+            },
+            onEnterBack: () => {
+              bgs.forEach((img, i)=> gsap.to(img, { opacity: i === bgIndex ? 1 : 0, duration: 0.6, ease: 'power2.out', overwrite: 'auto' }));
+            }
           }
         });
 
-        if (typeof prevIndex === 'number') {
-          if (rotateOut) {
-            tl.to(bgs[prevIndex], { rotation: 8, opacity: 0, duration: 0.6, ease: 'power2.out' }, 0);
-          } else {
-            tl.to(bgs[prevIndex], { opacity: 0, duration: 0.5, ease: 'power2.out' }, 0);
-          }
+        if (typeof prevIndex === 'number' && bgs[prevIndex]) {
+          tl.to(bgs[prevIndex], { opacity: 0, duration: 0.5, ease: 'power2.out' }, 0);
         }
-        tl.fromTo(bgs[bgIndex], { opacity: 0, scale: drift.scale + 0.14 }, { opacity: 1, scale: drift.scale, duration: 0.8, ease: 'power2.out' }, 0)
-          .to(bgs[bgIndex], { scale: 1, yPercent: drift.y, ease: 'none' }, 0.25);
+        if (bgs[bgIndex]) {
+          tl.fromTo(bgs[bgIndex], { opacity: 0, scale: driftScale + 0.14 }, { opacity: 1, scale: driftScale, duration: 0.8, ease: 'power2.out' }, 0)
+            .to(bgs[bgIndex], { scale: 1, yPercent: driftY, ease: 'none' }, 0.25);
+        }
 
-        lines.forEach((line, i) => tl.to(line, { opacity: 1, y: 0, duration: 0.22, ease: 'power2.out' }, i * 0.22 + 0.08));
-        tl.to(sec.querySelector('.author'), { opacity: 1, y: 0, duration: 0.25, ease: 'power2.out' }, lines.length * 0.22 + 0.12);
+        lines.forEach((line, i)=> tl.to(line, { opacity: 1, y: 0, duration: 0.22, ease: 'power2.out' }, i * 0.22 + 0.08));
+        if (author) tl.to(author, { opacity: 1, y: 0, duration: 0.25, ease: 'power2.out' }, lines.length * 0.22 + 0.12);
       }
 
-      // Quote 1..8 timelines
-      makeQuoteTL({ id: '#quote1', bgIndex: 1, prevIndex: 0, drift: { scale: 1.05, y: -6 } });
-      makeQuoteTL({ id: '#quote2', bgIndex: 2, prevIndex: 1, drift: { scale: 1.04, y: -8 } });
-      makeQuoteTL({ id: '#quote3', bgIndex: 3, prevIndex: 2, rotateOut: true, drift: { scale: 1.00, y: -4 } });
-      makeQuoteTL({ id: '#quote4', bgIndex: 4, prevIndex: 3, drift: { scale: 1.04, y: -6 } });
-      makeQuoteTL({ id: '#quote5', bgIndex: 5, prevIndex: 4, drift: { scale: 1.05, y: -6 } });
-      makeQuoteTL({ id: '#quote6', bgIndex: 6, prevIndex: 5, drift: { scale: 1.03, y: -5 } });
-      makeQuoteTL({ id: '#quote7', bgIndex: 7, prevIndex: 6, rotateOut: true, drift: { scale: 1.00, y: -3 } });
-      makeQuoteTL({ id: '#quote8', bgIndex: 8, prevIndex: 7, drift: { scale: 1.02, y: -4 } });
+      // Quote mapping:
+      // After intro: bg2 stays, then bg3..bg8 for subsequent quotes
+      makeQuoteTL({ id: '#quote1', bgIndex: 2, prevIndex: 0, driftY: -6, driftScale: 1.05 });
+      makeQuoteTL({ id: '#quote2', bgIndex: 3, prevIndex: 2, driftY: -8, driftScale: 1.04 });
+      makeQuoteTL({ id: '#quote3', bgIndex: 4, prevIndex: 3, driftY: -4, driftScale: 1.02 });
+      makeQuoteTL({ id: '#quote4', bgIndex: 5, prevIndex: 4, driftY: -6, driftScale: 1.04 });
+      makeQuoteTL({ id: '#quote5', bgIndex: 6, prevIndex: 5, driftY: -6, driftScale: 1.05 });
+      makeQuoteTL({ id: '#quote6', bgIndex: 7, prevIndex: 6, driftY: -5, driftScale: 1.03 });
+      makeQuoteTL({ id: '#quote7', bgIndex: 8, prevIndex: 7, driftY: -3, driftScale: 1.02 });
+      makeQuoteTL({ id: '#quote8', bgIndex: 8, prevIndex: 8, driftY: -4, driftScale: 1.02 });
 
       // Scrollspy for header nav (visual only; clicks still open modal)
       const navLinks = Array.from(document.querySelectorAll('.nav-right a'));
-      const spy = new IntersectionObserver((entries) => {
-        entries.forEach(en => {
-          if (en.isIntersecting) {
-            navLinks.forEach(a => a.removeAttribute('aria-current'));
+      const spy = new IntersectionObserver((entries)=>{
+        entries.forEach(en=>{
+          if (en.isIntersecting){
+            navLinks.forEach(a=>a.removeAttribute('aria-current'));
             const active = navLinks.find(a => a.getAttribute('href') === `#${en.target.id}`);
-            if (active) active.setAttribute('aria-current', 'true');
+            if (active) active.setAttribute('aria-current','true');
           }
         });
       }, { rootMargin: '-40% 0px -55% 0px', threshold: 0.01 });
-      ['intro','quote1','quote2','quote3','quote4','quote5','quote6','quote7','quote8'].forEach(id => {
+      ['intro','quote1','quote2','quote3','quote4','quote5','quote6','quote7','quote8'].forEach(id=>{
         const sec = document.getElementById(id);
         if (sec) spy.observe(sec);
       });
